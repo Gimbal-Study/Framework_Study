@@ -1,8 +1,20 @@
+#include <stm32f411xe.h>
+#include <stm32f4xx.h>
 
+typedef struct
+{
+    GPIO_TypeDef *tx_port;
+    uint8_t       tx_pin;
 
-#ifndef STM32_GPIO_CHANNEL_H
-#define STM32_GPIO_CHANNEL_H
+    GPIO_TypeDef *rx_port;
+    uint8_t       rx_pin;
 
+    uint8_t       alternate_function;
+
+    USART_TypeDef *USART_target;
+} Stm32_UartPinConfigType;
+
+/***************GPIO_PIN***********************/
 
 /* =========================================================================
  * GPIO A
@@ -133,6 +145,3 @@
 #define GPIO_H_13    813U
 #define GPIO_H_14    814U
 #define GPIO_H_15    815U
-
-
-#endif
