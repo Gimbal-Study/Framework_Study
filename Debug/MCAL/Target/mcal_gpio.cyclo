@@ -1,0 +1,6 @@
+../MCAL/Target/mcal_gpio.c:12:22:get_gpio_port	7
+../MCAL/Target/mcal_gpio.c:47:13:gpio_enable_clock	7
+../MCAL/Target/mcal_gpio.c:91:6:mcal_gpio_init	4
+../MCAL/Target/mcal_gpio.c:118:6:mcal_gpio_high	3
+../MCAL/Target/mcal_gpio.c:132:6:mcal_gpio_low	3
+../MCAL/Target/mcal_gpio.c:146:6:mcal_gpio_read	3
