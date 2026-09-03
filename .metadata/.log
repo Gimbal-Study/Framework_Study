@@ -1,0 +1,75 @@
+!SESSION 2026-09-03 17:50:48.047 -----------------------------------------------
+eclipse.buildId=Version 1.15.0
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-09-03 17:51:31.923
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-09-03 17:51:31.929
+!MESSAGE Log4j2 initialized with config file D:\sg_private\framwork_study\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-09-03 17:51:34.952
+!MESSAGE Started RMI Server, listening on port 41338
+
+!ENTRY org.eclipse.ui.ide 4 0 2026-09-03 17:52:03.588
+!MESSAGE Could not import project located at D:\sg_private\framwork_study
+!STACK 0
+org.eclipse.ui.internal.wizards.datatransfer.CouldNotImportProjectException: Could not import project located at D:\sg_private\framwork_study
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.toExistingOrNewProject(SmartImportJob.java:564)
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.run(SmartImportJob.java:251)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:63)
+Caused by: org.eclipse.core.internal.resources.ResourceException: Invalid project description.
+	at org.eclipse.core.internal.resources.Project.checkDescription(Project.java:211)
+	at org.eclipse.core.internal.resources.Project.assertCreateRequirements(Project.java:95)
+	at org.eclipse.core.internal.resources.Project.create(Project.java:305)
+	at org.eclipse.core.internal.resources.Project.create(Project.java:291)
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.createOrImportProject(SmartImportJob.java:603)
+	at org.eclipse.ui.internal.wizards.datatransfer.SmartImportJob.toExistingOrNewProject(SmartImportJob.java:551)
+	... 2 more
+
+!ENTRY org.eclipse.core.resources 4 77 2026-09-03 17:53:35.393
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2026-09-03 17:53:35.393
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2026-09-03 17:53:35.393
+!MESSAGE D:\sg_private\framwork_study overlaps the workspace location: D:\sg_private\framwork_study
+
+!ENTRY org.eclipse.core.resources 4 77 2026-09-03 18:35:38.287
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2026-09-03 18:35:38.287
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2026-09-03 18:35:38.287
+!MESSAGE D:\sg_private\framwork_study overlaps the workspace location: D:\sg_private\framwork_study
+
+!ENTRY org.eclipse.core.resources 4 77 2026-09-03 18:36:20.751
+!MESSAGE Invalid project description.
+!SUBENTRY 1 unknown 0 0 2026-09-03 18:36:20.751
+!MESSAGE OK
+!SUBENTRY 1 org.eclipse.core.resources 4 77 2026-09-03 18:36:20.751
+!MESSAGE D:\sg_private\framwork_study overlaps the workspace location: D:\sg_private\framwork_study
+!SESSION 2026-09-03 19:14:47.721 -----------------------------------------------
+eclipse.buildId=Version 1.15.0
+java.version=17.0.8.1
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ko_KR
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2026-09-03 19:14:59.401
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2026-09-03 19:14:59.401
+!MESSAGE Log4j2 initialized with config file D:\sg_private\framwork_study\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2026-09-03 19:15:02.481
+!MESSAGE Started RMI Server, listening on port 41338
+
+!ENTRY org.eclipse.cdt.core 1 0 2026-09-03 19:17:08.323
+!MESSAGE Indexed 'gimbal' (3 sources, 53 headers) in 1.04 sec: 1,950 declarations; 2,836 references; 0 unresolved inclusions; 2 syntax errors; 2 unresolved names (0.042%)
+
+!ENTRY org.eclipse.core.resources 2 2 2026-09-03 19:22:05.610
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2026-09-03 19:22:05.610
+!MESSAGE The project description file (.project) for 'gimbal' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.
