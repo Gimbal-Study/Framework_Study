@@ -77,7 +77,9 @@ CSRC = \
     Core/System/system_stm32f4xx.c \
     Core/System/clock.c \
     MCAL/Target/STM32F4xx/stm32_uart.c \
-    MCAL/Target/STM32F4xx/stm32_queue.c
+    MCAL/Target/STM32F4xx/stm32_queue.c \
+    Test/uart_test.c \
+    Core/System/systick.c
 
 ASRC = \
     Board/NUCLEO_F411RE/crt0.s
@@ -111,7 +113,10 @@ INCLUDE = \
     -I MCAL \
     -I Core/System \
     -I CMSIS/Core \
+    -I Test \
     -I CMSIS/Device/STM32F4xx \
+    -I CMSIS/Device/STM32F4xx \
+    -I Core/System \
     -I "$(C_DIR)/include" \
     -I "$(GCC_DIR)/include"
 

@@ -6,8 +6,8 @@
 
 #include "systick.h"
 #include "clock.h"
-#include "mcal_macro.h"
-#include "stm32f411xe.h"
+#include <macro.h>
+#include <stm32f411xe.h>
 
 void systick_run(unsigned int msec)
 {

@@ -20,10 +20,10 @@ bool read_queue(queue_t *q, uint8_t *data)
 {
 	if (queue_empty(q))
 	    return false;
-
+	
 	q->front = (q->front + 1) % QUEUE_MAX;
 	*data =  (q->data_array[q->front]);
-		
+	
 	return true;
 }
 

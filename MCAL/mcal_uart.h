@@ -17,5 +17,6 @@ typedef enum {
 mcal_uart_status_t mcal_uart_init(uint8_t uart_instance, uint32_t baud, mcal_parity_t parity, uint8_t stopbit);
 mcal_uart_status_t mcal_uart_write(uint8_t uart_instance,  const uint8_t *data, uint16_t len, uint16_t timeout);
 mcal_uart_status_t mcal_uart_read(uint8_t uart_instance, uint8_t *data, uint16_t len, uint16_t timeout);
+mcal_uart_status_t mcal_uart_Rx_Interrupt_Enable(uint8_t en, uint8_t uart_instance);
 
 #endif /* MCAL_UART_H */
