@@ -3,4 +3,4 @@
 
 void Board_Init(void);
 
-#endif
+#endif /* BOARD_INIT_H */

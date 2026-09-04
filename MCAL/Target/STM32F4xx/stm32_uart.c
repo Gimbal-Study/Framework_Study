@@ -52,6 +52,8 @@ queue_t uart1_q;
 queue_t uart2_q;
 queue_t uart6_q;
 
+volatile uint8_t Uart2_Rx_Expired = 0;
+
 uart_gpio_t uart_tx_gpio_confirm(uint8_t uart_instance, const Stm32_UartPinConfigType *uart_pinmap)
 {
   switch (uart_instance)
@@ -269,6 +271,9 @@ mcal_uart_status_t mcal_uart_read(uint8_t uart_instance, uint8_t *data, uint16_t
     }
   }
 
+  else
+    return MCAL_UART_ERROR;
+
   return MCAL_UART_OK;
 }
 
@@ -285,8 +290,6 @@ void Uart_Send_Byte(USART_TypeDef *uart_instance, char data)
     ;
   uart_instance->DR = data;
 }
-
-volatile uint8_t Uart2_Rx_Expired = 0;
 
 #if 0
 mcal_uart_status_t mcal_uart_Rx_Handler(uint8_t uart_instance)
@@ -358,6 +361,7 @@ void USART2_IRQHandler(void)
   if (MCAL_CHECK_BIT_SET(USART2->SR, 5))
   {
     uint8_t data = USART2->DR;
+    Uart2_Rx_Expired = 1;
 
     insert_queue(&uart2_q, data);
     NVIC_ClearPendingIRQ(USART2_IRQn);

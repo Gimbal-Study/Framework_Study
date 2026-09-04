@@ -14,8 +14,11 @@ extern "C" {
 #endif
 
 #include "mcal_common.h"
+#include "macro.h"
 
-
+#define sg      0
+#define ss      1
+#if sg
 /* =========================================================================
  * Timer Instance
  * ========================================================================= */
@@ -97,6 +100,25 @@ void mcal_timer_reset(mcal_timer_instance_t instance);
 
 #ifdef __cplusplus
 }
+#endif
+#endif
+
+#if ss
+typedef enum {
+    MCAL_TIMER_OK = 0,
+    MCAL_TIMER_ERROR,
+    MCAL_TIMER_BUSY,
+    MCAL_TIMER_TIMEOUT    
+} mcal_timer_status_t;
+
+bool mcal_timer_repeat_init(uint8_t timer_instance, uint32_t freq, uint32_t arr);
+bool mcal_timer_oneshot_init(uint8_t timer_instance, uint32_t freq, uint32_t arr);
+
+bool mcal_timer_int_enable(uint8_t timer_instance, bool act);
+
+bool mcal_timer_start(uint8_t timer_instance);
+void mcal_timer_stop(uint8_t timer_instance);
+
 #endif
 
 #endif /* MCAL_TIMER_H */

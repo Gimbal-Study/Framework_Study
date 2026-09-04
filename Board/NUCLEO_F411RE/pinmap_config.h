@@ -1,3 +1,6 @@
+#ifndef PINMAP_CONFIG_H
+#define PINMAP_CONFIG_H
+
 #include <stm32f411xe.h>
 #include <stm32f4xx.h>
 
@@ -145,3 +148,5 @@ typedef struct
 #define GPIO_H_13    813U
 #define GPIO_H_14    814U
 #define GPIO_H_15    815U
+
+#endif /* PINMAP_CONFIG_H */

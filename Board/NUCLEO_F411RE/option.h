@@ -1,3 +1,6 @@
+#ifndef OPTION_H
+#define OPTION_H
+
 #define SYSCLK  96000000
 #define HCLK	SYSCLK
 #define PCLK2	HCLK
@@ -12,3 +15,5 @@
 #define STACK_LIMIT	(HEAP_LIMIT + 8)
 #define STACK_BASE	(RAM_END + 1)
 #define STACK_SIZE	(STACK_BASE - STACK_LIMIT)
+
+#endif /* OPTION_H */
