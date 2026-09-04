@@ -1,6 +1,0 @@
-../Core/System/systick.c:12:6:systick_run	1
-../Core/System/systick.c:26:5:systick_check_timeout	1
-../Core/System/systick.c:32:14:systick_get_time	1
-../Core/System/systick.c:38:14:systick_get_load_time	1
-../Core/System/systick.c:44:6:systick_stop	1
-../Core/System/systick.c:50:6:delay_ms	2
