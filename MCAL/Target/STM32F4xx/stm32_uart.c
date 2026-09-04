@@ -4,8 +4,10 @@
 #include <pinmap_config.h>
 #include <string.h>
 #include <option.h>
+#include <mcal_timer.h>
 
 void Uart_Send_Byte(USART_TypeDef *uart_instance, char data);
+bool uart_timeout_tick(uint16_t time);
 
 /*USARTx_Pin_Map for STM32*/
 static const Stm32_UartPinConfigType uart1_pinmap =
@@ -209,6 +211,8 @@ mcal_uart_status_t mcal_uart_init(uint8_t uart_instance, uint32_t baud, mcal_par
 /*uart_write*/
 mcal_uart_status_t mcal_uart_write(uint8_t uart_instance, const uint8_t *data, uint16_t len, uint16_t timeout)
 {
+  mcal_timer_start(2);
+
   static const Stm32_UartPinConfigType *uart_s;
 
   switch (uart_instance)
@@ -240,6 +244,7 @@ mcal_uart_status_t mcal_uart_write(uint8_t uart_instance, const uint8_t *data, u
 
 mcal_uart_status_t mcal_uart_read(uint8_t uart_instance, uint8_t *data, uint16_t len, uint16_t timeout)
 {
+  // mcal_timer_
   queue_t *uart_q;
 
   switch (uart_instance)
@@ -377,4 +382,11 @@ void USART6_IRQHandler(void)
     insert_queue(&uart6_q, data);
     NVIC_ClearPendingIRQ(USART6_IRQn);
   }
+}
+
+bool uart_timeout_tick(uint8_t timer_instance, uint16_t time)
+{
+  mcal_timer_oneshot_init(timer_instance, 50000, 40000);
+  mcal_timer_int_enable(timer_instance, 1);
+  mcal_timer_start();
 }
