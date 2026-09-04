@@ -14,10 +14,12 @@ int gpio_test_main(void)
     {
 
         mcal_gpio_high(105);
-        for (volatile unsigned int i = 0; i < 1000000; i++);
+        delay_ms(100);
+        //for (volatile unsigned int i = 0; i < 12000000; i++) ;
 
-        mcal_gpio_low(105);
-        for (volatile unsigned int i = 0; i < 1000000; i++) ;
+        mcal_gpio_low(105);        
+        delay_ms(100);        
+        //for (volatile unsigned int i = 0; i < 12000000; i++) ;
     }
 
 	return 0;
