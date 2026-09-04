@@ -17,7 +17,7 @@ AGENTS.md에는 세부 구현 규칙을 중복해서 정의하지 않는다.
 * MCU: STM32F411RE
 * Board: NUCLEO-F411RE
 * Language: C
-* IDE / Build: STM32CubeIDE
+* IDE / Build: VS Code or STM32CubeIDE
 
 주요 Source 영역:
 
