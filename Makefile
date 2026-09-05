@@ -78,6 +78,7 @@ CSRC = \
     Core/System/clock.c \
     MCAL/Target/STM32F4xx/stm32_uart.c \
     MCAL/Target/STM32F4xx/stm32_queue.c \
+    MCAL/Target/STM32F4xx/stm32_timer.c \
     Test/uart_test.c \
     Core/System/systick.c
 

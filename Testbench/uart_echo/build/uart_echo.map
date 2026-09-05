@@ -15,7 +15,7 @@ C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-n
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-memchr.o)
                               C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_i.o) (memchr)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strlen.o)
-                              Core/main.o (strlen)
+                              D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o (strlen)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libm_a-sf_nan.o)
                               C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfscanf_float.o) (nanf)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
@@ -115,17 +115,17 @@ C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-n
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-isattyr.o)
                               C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-makebuf.o) (_isatty_r)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldf3.o)
-                              MCAL/Target/STM32F4xx/stm32_uart.o (__aeabi_dmul)
+                              D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o (__aeabi_dmul)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
-                              MCAL/Target/STM32F4xx/stm32_uart.o (__aeabi_dsub)
+                              D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o (__aeabi_dsub)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldivdf3.o)
-                              MCAL/Target/STM32F4xx/stm32_uart.o (__aeabi_ddiv)
+                              D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o (__aeabi_ddiv)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_cmpdf2.o)
                               C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_float.o) (__aeabi_dcmpeq)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_unorddf2.o)
                               C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_float.o) (__aeabi_dcmpun)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixdfsi.o)
-                              MCAL/Target/STM32F4xx/stm32_uart.o (__aeabi_d2iz)
+                              D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o (__aeabi_d2iz)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixunsdfsi.o)
                               C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o) (__aeabi_d2uiz)
 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_truncdfsf2.o)
@@ -183,15 +183,15 @@ RAM              0x20000000         0x00020000         xrw
 
 Linker script and memory map
 
-LOAD Core/main.o
-LOAD Core/System/system_stm32f4xx.o
-LOAD Core/System/clock.o
-LOAD MCAL/Target/STM32F4xx/stm32_uart.o
-LOAD MCAL/Target/STM32F4xx/stm32_queue.o
-LOAD MCAL/Target/STM32F4xx/stm32_timer.o
-LOAD Test/uart_test.o
-LOAD Core/System/systick.o
-LOAD Board/NUCLEO_F411RE/crt0.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+LOAD D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
 LOAD C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a
 LOAD C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a
 START GROUP
@@ -211,8 +211,8 @@ END GROUP
 
 .text           0x08000000     0x6da8
                 0x08000000                        __RO_BASE__ = .
- Board/NUCLEO_F411RE/crt0.o(.text)
- .text          0x08000000      0x200 Board/NUCLEO_F411RE/crt0.o
+ *Board_NUCLEO_F411RE_crt0.s.o(.text)
+ .text          0x08000000      0x200 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
                 0x08000198                RTC_Alarm_IRQHandler
                 0x08000198                EXTI2_IRQHandler
                 0x08000198                DebugMon_Handler
@@ -279,15 +279,15 @@ END GROUP
                 0x08000198                DMA1_Stream3_IRQHandler
                 0x0800019a                __start
  *(.text)
- .text          0x08000200       0x30 Core/main.o
+ .text          0x08000200       0x30 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
                 0x08000200                Main
- .text          0x08000230       0x84 Core/System/system_stm32f4xx.o
+ .text          0x08000230       0x84 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
                 0x08000230                SystemInit
                 0x08000244                SystemCoreClockUpdate
- .text          0x080002b4       0x60 Core/System/clock.o
+ .text          0x080002b4       0x60 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
                 0x080002b4                Clock_Init
  *fill*         0x08000314        0x4 
- .text          0x08000318      0x594 MCAL/Target/STM32F4xx/stm32_uart.o
+ .text          0x08000318      0x594 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
                 0x08000318                uart_tx_gpio_confirm
                 0x0800037c                uart_rx_gpio_confirm
                 0x080003e0                mcal_uart_init
@@ -298,21 +298,21 @@ END GROUP
                 0x0800080c                USART1_IRQHandler
                 0x08000838                USART2_IRQHandler
                 0x08000880                USART6_IRQHandler
- .text          0x080008ac       0xa4 MCAL/Target/STM32F4xx/stm32_queue.o
+ .text          0x080008ac       0xa4 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
                 0x080008ac                queue_full
                 0x080008d0                queue_empty
                 0x080008e0                read_queue
                 0x08000910                queue_init
                 0x08000918                insert_queue
- .text          0x08000950      0x49c MCAL/Target/STM32F4xx/stm32_timer.o
+ .text          0x08000950      0x49c D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
                 0x08000950                mcal_timer_repeat_init
                 0x08000a78                mcal_timer_oneshot_init
                 0x08000ba0                mcal_timer_int_enable
                 0x08000cb4                mcal_timer_start
                 0x08000d54                mcal_timer_stop
- .text          0x08000dec       0x7c Test/uart_test.o
+ .text          0x08000dec       0x7c D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
                 0x08000dec                uart_test_main
- .text          0x08000e68       0xa8 Core/System/systick.o
+ .text          0x08000e68       0xa8 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
                 0x08000e68                systick_run
                 0x08000ea0                systick_check_timeout
                 0x08000eac                systick_get_time
@@ -869,7 +869,7 @@ END GROUP
  .v4_bx         0x08006da8        0x0 linker stubs
 
 .iplt           0x08006da8        0x0
- .iplt          0x08006da8        0x0 Core/main.o
+ .iplt          0x08006da8        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
 
 .ARM.extab      0x08006da8        0x0
  *(.ARM.extab*)
@@ -891,13 +891,13 @@ END GROUP
 
 .rodata         0x08006db0      0x4c0
  *(.rodata)
- .rodata        0x08006db0       0x18 Core/System/system_stm32f4xx.o
+ .rodata        0x08006db0       0x18 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
                 0x08006db0                AHBPrescTable
                 0x08006dc0                APBPrescTable
- .rodata        0x08006dc8       0x3c MCAL/Target/STM32F4xx/stm32_uart.o
+ .rodata        0x08006dc8       0x3c D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
  *(.rodata.*)
  .rodata.str1.4
-                0x08006e04       0x11 Core/main.o
+                0x08006e04       0x11 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
  .rodata._printf_float.str1.1
                 0x08006e15      0x1d9 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_float.o)
                                  0x12 (size before relaxing)
@@ -962,21 +962,21 @@ END GROUP
                 0x08007270                        __RO_LIMIT__ = .
 
 .rel.dyn        0x08007270        0x0
- .rel.iplt      0x08007270        0x0 Core/main.o
+ .rel.iplt      0x08007270        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
 
 .data           0x20000000      0x1cc load address 0x08007270
                 0x20000000                        __RW_BASE__ = .
  *(.data)
- .data          0x20000000        0x0 Core/main.o
- .data          0x20000000        0x4 Core/System/system_stm32f4xx.o
+ .data          0x20000000        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+ .data          0x20000000        0x4 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
                 0x20000000                SystemCoreClock
- .data          0x20000004        0x0 Core/System/clock.o
- .data          0x20000004        0x0 MCAL/Target/STM32F4xx/stm32_uart.o
- .data          0x20000004        0x0 MCAL/Target/STM32F4xx/stm32_queue.o
- .data          0x20000004        0x0 MCAL/Target/STM32F4xx/stm32_timer.o
- .data          0x20000004        0x0 Test/uart_test.o
- .data          0x20000004        0x0 Core/System/systick.o
- .data          0x20000004        0x0 Board/NUCLEO_F411RE/crt0.o
+ .data          0x20000004        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+ .data          0x20000004        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+ .data          0x20000004        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+ .data          0x20000004        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+ .data          0x20000004        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+ .data          0x20000004        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+ .data          0x20000004        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
  .data          0x20000004        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_float.o)
  .data          0x20000004        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_i.o)
  .data          0x20000004        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfscanf_float.o)
@@ -1072,32 +1072,32 @@ END GROUP
                 0x08007270                        __RW_LOAD_ADDR__ = LOADADDR (.data)
 
 .igot.plt       0x200001cc        0x0 load address 0x0800743c
- .igot.plt      0x200001cc        0x0 Core/main.o
+ .igot.plt      0x200001cc        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
 
 .bss            0x200001cc      0xd3c load address 0x0800743c
                 0x200001cc                        __ZI_BASE__ = .
  *(.bss)
- .bss           0x200001cc        0x0 Core/main.o
- .bss           0x200001cc        0x0 Core/System/system_stm32f4xx.o
- .bss           0x200001cc        0x0 Core/System/clock.o
- .bss           0x200001cc      0xbce MCAL/Target/STM32F4xx/stm32_uart.o
+ .bss           0x200001cc        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+ .bss           0x200001cc        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+ .bss           0x200001cc        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+ .bss           0x200001cc      0xbce D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
                 0x200001d0                uart1_q
                 0x200005bc                uart2_q
                 0x200009a8                uart6_q
                 0x20000d98                Uart2_Rx_Expired
                 0x20000d99                rx_cnt
- .bss           0x20000d9a        0x0 MCAL/Target/STM32F4xx/stm32_queue.o
- .bss           0x20000d9a        0x0 MCAL/Target/STM32F4xx/stm32_timer.o
+ .bss           0x20000d9a        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+ .bss           0x20000d9a        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
  *fill*         0x20000d9a        0x2 
- .bss           0x20000d9c       0x14 Test/uart_test.o
+ .bss           0x20000d9c       0x14 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
                 0x20000d9c                tb_tx_failed
                 0x20000d9d                tb_last_read
                 0x20000da0                tb_rx_bytes
                 0x20000da4                tb_skipped_nuls
                 0x20000da8                tb_last_write
                 0x20000dac                tb_tx_bytes
- .bss           0x20000db0        0x0 Core/System/systick.o
- .bss           0x20000db0        0x0 Board/NUCLEO_F411RE/crt0.o
+ .bss           0x20000db0        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+ .bss           0x20000db0        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
  .bss           0x20000db0        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_float.o)
  .bss           0x20000db0        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_i.o)
  .bss           0x20000db0        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfscanf_float.o)
@@ -1224,120 +1224,120 @@ END GROUP
                 0x20000f08                        end = .
                 0x20000f08                        _end = .
                 0x00000d3c                        __ZI_SIZE__ = SIZEOF (.bss)
-OUTPUT(rom_0x08000000.elf elf32-littlearm)
+OUTPUT(D:\Project\Framework_Study\Testbench\uart_echo\build\uart_echo.elf elf32-littlearm)
 LOAD linker stubs
 
-.debug_info     0x00000000     0x30a7
- .debug_info    0x00000000      0x239 Core/main.o
- .debug_info    0x00000239      0x54c Core/System/system_stm32f4xx.o
- .debug_info    0x00000785      0x2b4 Core/System/clock.o
- .debug_info    0x00000a39     0x115f MCAL/Target/STM32F4xx/stm32_uart.o
- .debug_info    0x00001b98      0x269 MCAL/Target/STM32F4xx/stm32_queue.o
- .debug_info    0x00001e01      0xe5f MCAL/Target/STM32F4xx/stm32_timer.o
- .debug_info    0x00002c60      0x238 Test/uart_test.o
- .debug_info    0x00002e98      0x1ea Core/System/systick.o
- .debug_info    0x00003082       0x25 Board/NUCLEO_F411RE/crt0.o
+.debug_info     0x00000000     0x308d
+ .debug_info    0x00000000      0x239 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+ .debug_info    0x00000239      0x54c D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+ .debug_info    0x00000785      0x2b4 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+ .debug_info    0x00000a39     0x114c D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+ .debug_info    0x00001b85      0x269 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+ .debug_info    0x00001dee      0xe5f D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+ .debug_info    0x00002c4d      0x231 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+ .debug_info    0x00002e7e      0x1ea D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+ .debug_info    0x00003068       0x25 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
 
 .debug_abbrev   0x00000000      0xdc3
- .debug_abbrev  0x00000000       0xeb Core/main.o
- .debug_abbrev  0x000000eb      0x11e Core/System/system_stm32f4xx.o
- .debug_abbrev  0x00000209       0xe6 Core/System/clock.o
- .debug_abbrev  0x000002ef      0x414 MCAL/Target/STM32F4xx/stm32_uart.o
- .debug_abbrev  0x00000703      0x184 MCAL/Target/STM32F4xx/stm32_queue.o
- .debug_abbrev  0x00000887      0x29c MCAL/Target/STM32F4xx/stm32_timer.o
- .debug_abbrev  0x00000b23      0x110 Test/uart_test.o
- .debug_abbrev  0x00000c33      0x17c Core/System/systick.o
- .debug_abbrev  0x00000daf       0x14 Board/NUCLEO_F411RE/crt0.o
+ .debug_abbrev  0x00000000       0xeb D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+ .debug_abbrev  0x000000eb      0x11e D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+ .debug_abbrev  0x00000209       0xe6 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+ .debug_abbrev  0x000002ef      0x414 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+ .debug_abbrev  0x00000703      0x184 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+ .debug_abbrev  0x00000887      0x29c D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+ .debug_abbrev  0x00000b23      0x110 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+ .debug_abbrev  0x00000c33      0x17c D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+ .debug_abbrev  0x00000daf       0x14 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
 
 .debug_aranges  0x00000000      0x120
  .debug_aranges
-                0x00000000       0x20 Core/main.o
+                0x00000000       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
  .debug_aranges
-                0x00000020       0x20 Core/System/system_stm32f4xx.o
+                0x00000020       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
  .debug_aranges
-                0x00000040       0x20 Core/System/clock.o
+                0x00000040       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
  .debug_aranges
-                0x00000060       0x20 MCAL/Target/STM32F4xx/stm32_uart.o
+                0x00000060       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
  .debug_aranges
-                0x00000080       0x20 MCAL/Target/STM32F4xx/stm32_queue.o
+                0x00000080       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
  .debug_aranges
-                0x000000a0       0x20 MCAL/Target/STM32F4xx/stm32_timer.o
+                0x000000a0       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
  .debug_aranges
-                0x000000c0       0x20 Test/uart_test.o
+                0x000000c0       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
  .debug_aranges
-                0x000000e0       0x20 Core/System/systick.o
+                0x000000e0       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
  .debug_aranges
-                0x00000100       0x20 Board/NUCLEO_F411RE/crt0.o
+                0x00000100       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
 
-.debug_line     0x00000000     0x1eda
- .debug_line    0x00000000      0x236 Core/main.o
- .debug_line    0x00000236      0x25c Core/System/system_stm32f4xx.o
- .debug_line    0x00000492      0x1d9 Core/System/clock.o
- .debug_line    0x0000066b      0x746 MCAL/Target/STM32F4xx/stm32_uart.o
- .debug_line    0x00000db1      0x20a MCAL/Target/STM32F4xx/stm32_queue.o
- .debug_line    0x00000fbb      0xa98 MCAL/Target/STM32F4xx/stm32_timer.o
- .debug_line    0x00001a53      0x20f Test/uart_test.o
- .debug_line    0x00001c62      0x1ff Core/System/systick.o
- .debug_line    0x00001e61       0x79 Board/NUCLEO_F411RE/crt0.o
+.debug_line     0x00000000     0x2110
+ .debug_line    0x00000000      0x2a2 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+ .debug_line    0x000002a2      0x264 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+ .debug_line    0x00000506      0x20f D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+ .debug_line    0x00000715      0x7cc D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+ .debug_line    0x00000ee1      0x240 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+ .debug_line    0x00001121      0xae9 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+ .debug_line    0x00001c0a      0x258 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+ .debug_line    0x00001e62      0x235 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+ .debug_line    0x00002097       0x79 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
 
-.debug_str      0x00000000      0xdc8
- .debug_str     0x00000000      0xdc8 Core/main.o
-                                0x255 (size before relaxing)
- .debug_str     0x00000dc8        0x0 Core/System/system_stm32f4xx.o
-                                0x364 (size before relaxing)
- .debug_str     0x00000dc8        0x0 Core/System/clock.o
-                                0x2be (size before relaxing)
- .debug_str     0x00000dc8        0x0 MCAL/Target/STM32F4xx/stm32_uart.o
-                                0xadd (size before relaxing)
- .debug_str     0x00000dc8        0x0 MCAL/Target/STM32F4xx/stm32_queue.o
-                                0x208 (size before relaxing)
- .debug_str     0x00000dc8        0x0 MCAL/Target/STM32F4xx/stm32_timer.o
-                                0x79c (size before relaxing)
- .debug_str     0x00000dc8        0x0 Test/uart_test.o
-                                0x27d (size before relaxing)
- .debug_str     0x00000dc8        0x0 Core/System/systick.o
-                                0x200 (size before relaxing)
- .debug_str     0x00000dc8        0x0 Board/NUCLEO_F411RE/crt0.o
-                                 0x44 (size before relaxing)
+.debug_str      0x00000000      0xecf
+ .debug_str     0x00000000      0xecf D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+                                0x270 (size before relaxing)
+ .debug_str     0x00000ecf        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+                                0x37f (size before relaxing)
+ .debug_str     0x00000ecf        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+                                0x2d9 (size before relaxing)
+ .debug_str     0x00000ecf        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+                                0xaf8 (size before relaxing)
+ .debug_str     0x00000ecf        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+                                0x223 (size before relaxing)
+ .debug_str     0x00000ecf        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+                                0x7b7 (size before relaxing)
+ .debug_str     0x00000ecf        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+                                0x2a7 (size before relaxing)
+ .debug_str     0x00000ecf        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+                                0x21b (size before relaxing)
+ .debug_str     0x00000ecf        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+                                 0x5f (size before relaxing)
 
 .comment        0x00000000       0x45
- .comment       0x00000000       0x45 Core/main.o
+ .comment       0x00000000       0x45 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
                                  0x46 (size before relaxing)
- .comment       0x00000045        0x0 Core/System/system_stm32f4xx.o
+ .comment       0x00000045        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
                                  0x46 (size before relaxing)
- .comment       0x00000045        0x0 Core/System/clock.o
+ .comment       0x00000045        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
                                  0x46 (size before relaxing)
- .comment       0x00000045        0x0 MCAL/Target/STM32F4xx/stm32_uart.o
+ .comment       0x00000045        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
                                  0x46 (size before relaxing)
- .comment       0x00000045        0x0 MCAL/Target/STM32F4xx/stm32_queue.o
+ .comment       0x00000045        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
                                  0x46 (size before relaxing)
- .comment       0x00000045        0x0 MCAL/Target/STM32F4xx/stm32_timer.o
+ .comment       0x00000045        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
                                  0x46 (size before relaxing)
- .comment       0x00000045        0x0 Test/uart_test.o
+ .comment       0x00000045        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
                                  0x46 (size before relaxing)
- .comment       0x00000045        0x0 Core/System/systick.o
+ .comment       0x00000045        0x0 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
                                  0x46 (size before relaxing)
 
 .ARM.attributes
                 0x00000000       0x32
  .ARM.attributes
-                0x00000000       0x34 Core/main.o
+                0x00000000       0x34 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
  .ARM.attributes
-                0x00000034       0x34 Core/System/system_stm32f4xx.o
+                0x00000034       0x34 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
  .ARM.attributes
-                0x00000068       0x34 Core/System/clock.o
+                0x00000068       0x34 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
  .ARM.attributes
-                0x0000009c       0x34 MCAL/Target/STM32F4xx/stm32_uart.o
+                0x0000009c       0x34 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
  .ARM.attributes
-                0x000000d0       0x34 MCAL/Target/STM32F4xx/stm32_queue.o
+                0x000000d0       0x34 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
  .ARM.attributes
-                0x00000104       0x34 MCAL/Target/STM32F4xx/stm32_timer.o
+                0x00000104       0x34 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
  .ARM.attributes
-                0x00000138       0x34 Test/uart_test.o
+                0x00000138       0x34 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
  .ARM.attributes
-                0x0000016c       0x34 Core/System/systick.o
+                0x0000016c       0x34 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
  .ARM.attributes
-                0x000001a0       0x21 Board/NUCLEO_F411RE/crt0.o
+                0x000001a0       0x21 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
  .ARM.attributes
                 0x000001c1       0x34 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_float.o)
  .ARM.attributes
@@ -1494,14 +1494,14 @@ LOAD linker stubs
                 0x00001058       0x34 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libnosys.a(_exit.o)
 
 .debug_frame    0x00000000     0x1a88
- .debug_frame   0x00000000       0x28 Core/main.o
- .debug_frame   0x00000028       0x30 Core/System/system_stm32f4xx.o
- .debug_frame   0x00000058       0x20 Core/System/clock.o
- .debug_frame   0x00000078      0x128 MCAL/Target/STM32F4xx/stm32_uart.o
- .debug_frame   0x000001a0       0x68 MCAL/Target/STM32F4xx/stm32_queue.o
- .debug_frame   0x00000208       0x60 MCAL/Target/STM32F4xx/stm32_timer.o
- .debug_frame   0x00000268       0x38 Test/uart_test.o
- .debug_frame   0x000002a0       0x70 Core/System/systick.o
+ .debug_frame   0x00000000       0x28 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+ .debug_frame   0x00000028       0x30 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+ .debug_frame   0x00000058       0x20 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+ .debug_frame   0x00000078      0x128 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+ .debug_frame   0x000001a0       0x68 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+ .debug_frame   0x00000208       0x60 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+ .debug_frame   0x00000268       0x38 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+ .debug_frame   0x000002a0       0x70 D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
  .debug_frame   0x00000310       0x90 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_float.o)
  .debug_frame   0x000003a0       0x60 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_i.o)
  .debug_frame   0x00000400       0x40 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfscanf_float.o)
@@ -1579,147 +1579,147 @@ LOAD linker stubs
  .debug_frame   0x00001a68       0x20 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libnosys.a(_exit.o)
 
 .debug_loclists
-                0x00000000      0xfca
+                0x00000000      0xf8a
  .debug_loclists
-                0x00000000       0x6a Core/System/system_stm32f4xx.o
+                0x00000000       0x6a D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
  .debug_loclists
-                0x0000006a      0x799 MCAL/Target/STM32F4xx/stm32_uart.o
+                0x0000006a      0x759 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
  .debug_loclists
-                0x00000803      0x111 MCAL/Target/STM32F4xx/stm32_queue.o
+                0x000007c3      0x111 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
  .debug_loclists
-                0x00000914      0x65c MCAL/Target/STM32F4xx/stm32_timer.o
+                0x000008d4      0x65c D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
  .debug_loclists
-                0x00000f70       0x5a Core/System/systick.o
+                0x00000f30       0x5a D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
 
 .debug_rnglists
                 0x00000000      0x1b0
  .debug_rnglists
-                0x00000000       0x77 MCAL/Target/STM32F4xx/stm32_uart.o
+                0x00000000       0x77 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
  .debug_rnglists
-                0x00000077      0x126 MCAL/Target/STM32F4xx/stm32_timer.o
+                0x00000077      0x126 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
  .debug_rnglists
-                0x0000019d       0x13 Test/uart_test.o
+                0x0000019d       0x13 D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
 
 .debug_line_str
-                0x00000000      0x20a
+                0x00000000      0x225
  .debug_line_str
-                0x00000000      0x20a Board/NUCLEO_F411RE/crt0.o
-                                 0x36 (size before relaxing)
+                0x00000000      0x225 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+                                 0x51 (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-memchr.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-memchr.o)
                                  0xe1 (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strlen.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strlen.o)
                                  0xeb (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strcmp.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strcmp.o)
                                  0xea (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldf3.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldf3.o)
                                  0xce (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
                                  0xce (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldivdf3.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldivdf3.o)
                                  0xce (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_cmpdf2.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_cmpdf2.o)
                                  0xce (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_unorddf2.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_unorddf2.o)
                                  0xce (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixdfsi.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixdfsi.o)
                                  0xce (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixunsdfsi.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixunsdfsi.o)
                                  0xce (size before relaxing)
  .debug_line_str
-                0x0000020a        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_truncdfsf2.o)
+                0x00000225        0x0 C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_truncdfsf2.o)
                                  0xce (size before relaxing)
 
 Cross Reference Table
 
 Symbol                                            File
-ADC_IRQHandler                                    Board/NUCLEO_F411RE/crt0.o
-AHBPrescTable                                     Core/System/system_stm32f4xx.o
-APBPrescTable                                     Core/System/system_stm32f4xx.o
-BusFault_Handler                                  Board/NUCLEO_F411RE/crt0.o
-Clock_Init                                        Core/System/clock.o
-                                                  Core/main.o
-DMA1_Stream0_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA1_Stream1_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA1_Stream2_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA1_Stream3_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA1_Stream4_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA1_Stream5_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA1_Stream6_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA1_Stream7_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA2_Stream0_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA2_Stream1_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA2_Stream2_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA2_Stream3_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA2_Stream4_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA2_Stream5_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA2_Stream6_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DMA2_Stream7_IRQHandler                           Board/NUCLEO_F411RE/crt0.o
-DebugMon_Handler                                  Board/NUCLEO_F411RE/crt0.o
-EXTI0_IRQHandler                                  Board/NUCLEO_F411RE/crt0.o
-EXTI15_10_IRQHandler                              Board/NUCLEO_F411RE/crt0.o
-EXTI1_IRQHandler                                  Board/NUCLEO_F411RE/crt0.o
-EXTI2_IRQHandler                                  Board/NUCLEO_F411RE/crt0.o
-EXTI3_IRQHandler                                  Board/NUCLEO_F411RE/crt0.o
-EXTI4_IRQHandler                                  Board/NUCLEO_F411RE/crt0.o
-EXTI9_5_IRQHandler                                Board/NUCLEO_F411RE/crt0.o
-FLASH_IRQHandler                                  Board/NUCLEO_F411RE/crt0.o
-FPU_IRQHandler                                    Board/NUCLEO_F411RE/crt0.o
-HardFault_Handler                                 Board/NUCLEO_F411RE/crt0.o
-I2C1_ER_IRQHandler                                Board/NUCLEO_F411RE/crt0.o
-I2C1_EV_IRQHandler                                Board/NUCLEO_F411RE/crt0.o
-I2C2_ER_IRQHandler                                Board/NUCLEO_F411RE/crt0.o
-I2C2_EV_IRQHandler                                Board/NUCLEO_F411RE/crt0.o
-I2C3_ER_IRQHandler                                Board/NUCLEO_F411RE/crt0.o
-I2C3_EV_IRQHandler                                Board/NUCLEO_F411RE/crt0.o
-Invalid_ISR                                       Board/NUCLEO_F411RE/crt0.o
-Main                                              Core/main.o
-                                                  Board/NUCLEO_F411RE/crt0.o
-MemManage_Handler                                 Board/NUCLEO_F411RE/crt0.o
-NMI_Handler                                       Board/NUCLEO_F411RE/crt0.o
-OTG_FS_IRQHandler                                 Board/NUCLEO_F411RE/crt0.o
-OTG_FS_WKUP_IRQHandler                            Board/NUCLEO_F411RE/crt0.o
-PVD_IRQHandler                                    Board/NUCLEO_F411RE/crt0.o
-PendSV_Handler                                    Board/NUCLEO_F411RE/crt0.o
-RCC_IRQHandler                                    Board/NUCLEO_F411RE/crt0.o
-RTC_Alarm_IRQHandler                              Board/NUCLEO_F411RE/crt0.o
-RTC_WKUP_IRQHandler                               Board/NUCLEO_F411RE/crt0.o
-SDIO_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-SPI1_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-SPI2_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-SPI3_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-SPI4_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-SPI5_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-SVC_Handler                                       Board/NUCLEO_F411RE/crt0.o
-SysTick_Handler                                   Board/NUCLEO_F411RE/crt0.o
-SystemCoreClock                                   Core/System/system_stm32f4xx.o
-SystemCoreClockUpdate                             Core/System/system_stm32f4xx.o
-SystemInit                                        Core/System/system_stm32f4xx.o
-TAMP_STAMP_IRQHandler                             Board/NUCLEO_F411RE/crt0.o
-TIM1_BRK_TIM9_IRQHandler                          Board/NUCLEO_F411RE/crt0.o
-TIM1_CC_IRQHandler                                Board/NUCLEO_F411RE/crt0.o
-TIM1_TRG_COM_TIM11_IRQHandler                     Board/NUCLEO_F411RE/crt0.o
-TIM1_UP_TIM10_IRQHandler                          Board/NUCLEO_F411RE/crt0.o
-TIM2_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-TIM3_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-TIM4_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-TIM5_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
-USART1_IRQHandler                                 MCAL/Target/STM32F4xx/stm32_uart.o
-USART2_IRQHandler                                 MCAL/Target/STM32F4xx/stm32_uart.o
-USART6_IRQHandler                                 MCAL/Target/STM32F4xx/stm32_uart.o
-Uart2_Rx_Expired                                  MCAL/Target/STM32F4xx/stm32_uart.o
-Uart_Send_Byte                                    MCAL/Target/STM32F4xx/stm32_uart.o
-UsageFault_Handler                                Board/NUCLEO_F411RE/crt0.o
-WWDG_IRQHandler                                   Board/NUCLEO_F411RE/crt0.o
+ADC_IRQHandler                                    D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+AHBPrescTable                                     D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+APBPrescTable                                     D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+BusFault_Handler                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+Clock_Init                                        D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_clock.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+DMA1_Stream0_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA1_Stream1_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA1_Stream2_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA1_Stream3_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA1_Stream4_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA1_Stream5_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA1_Stream6_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA1_Stream7_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA2_Stream0_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA2_Stream1_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA2_Stream2_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA2_Stream3_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA2_Stream4_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA2_Stream5_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA2_Stream6_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DMA2_Stream7_IRQHandler                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+DebugMon_Handler                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+EXTI0_IRQHandler                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+EXTI15_10_IRQHandler                              D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+EXTI1_IRQHandler                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+EXTI2_IRQHandler                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+EXTI3_IRQHandler                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+EXTI4_IRQHandler                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+EXTI9_5_IRQHandler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+FLASH_IRQHandler                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+FPU_IRQHandler                                    D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+HardFault_Handler                                 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+I2C1_ER_IRQHandler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+I2C1_EV_IRQHandler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+I2C2_ER_IRQHandler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+I2C2_EV_IRQHandler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+I2C3_ER_IRQHandler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+I2C3_EV_IRQHandler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+Invalid_ISR                                       D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+Main                                              D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+MemManage_Handler                                 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+NMI_Handler                                       D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+OTG_FS_IRQHandler                                 D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+OTG_FS_WKUP_IRQHandler                            D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+PVD_IRQHandler                                    D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+PendSV_Handler                                    D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+RCC_IRQHandler                                    D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+RTC_Alarm_IRQHandler                              D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+RTC_WKUP_IRQHandler                               D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SDIO_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SPI1_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SPI2_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SPI3_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SPI4_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SPI5_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SVC_Handler                                       D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SysTick_Handler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+SystemCoreClock                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+SystemCoreClockUpdate                             D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+SystemInit                                        D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_system_stm32f4xx.c.o
+TAMP_STAMP_IRQHandler                             D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+TIM1_BRK_TIM9_IRQHandler                          D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+TIM1_CC_IRQHandler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+TIM1_TRG_COM_TIM11_IRQHandler                     D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+TIM1_UP_TIM10_IRQHandler                          D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+TIM2_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+TIM3_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+TIM4_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+TIM5_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+USART1_IRQHandler                                 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+USART2_IRQHandler                                 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+USART6_IRQHandler                                 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+Uart2_Rx_Expired                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+Uart_Send_Byte                                    D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+UsageFault_Handler                                D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+WWDG_IRQHandler                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
 _Balloc                                           C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-mprec.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-gdtoa-gethex.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
@@ -1729,10 +1729,10 @@ _Bfree                                            C:/arm-gnu-toolchain-15.2.rel1
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
 _PathLocale                                       C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-locale.o)
-__RO_LIMIT__                                      Board/NUCLEO_F411RE/crt0.o
-__RW_BASE__                                       Board/NUCLEO_F411RE/crt0.o
-__ZI_BASE__                                       Board/NUCLEO_F411RE/crt0.o
-__ZI_LIMIT__                                      Board/NUCLEO_F411RE/crt0.o
+__RO_LIMIT__                                      D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+__RW_BASE__                                       D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+__ZI_BASE__                                       D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
+__ZI_LIMIT__                                      D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
 __adddf3                                          C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
 __aeabi_cdcmpeq                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_cmpdf2.o)
 __aeabi_cdcmple                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_cmpdf2.o)
@@ -1742,7 +1742,7 @@ __aeabi_d2f                                       C:/arm-gnu-toolchain-15.2.rel1
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfscanf_float.o)
 __aeabi_d2iz                                      C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixdfsi.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 __aeabi_d2lz                                      C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_fixdfdi.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
 __aeabi_d2uiz                                     C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_fixunsdfsi.o)
@@ -1753,7 +1753,7 @@ __aeabi_d2ulz                                     C:/arm-gnu-toolchain-15.2.rel1
 __aeabi_dadd                                      C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 __aeabi_dcmpeq                                    C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_cmpdf2.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
@@ -1779,20 +1779,20 @@ __aeabi_ddiv                                      C:/arm-gnu-toolchain-15.2.rel1
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-mprec.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 __aeabi_dmul                                      C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldivdf3.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_muldf3.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_fixunsdfdi.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-mprec.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 __aeabi_drsub                                     C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
 __aeabi_dsub                                      C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_fixunsdfdi.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 __aeabi_f2d                                       C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
 __aeabi_i2d                                       C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
@@ -1802,7 +1802,7 @@ __aeabi_ui2d                                      C:/arm-gnu-toolchain-15.2.rel1
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_fixunsdfdi.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 __aeabi_ul2d                                      C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
 __any_on                                          C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-mprec.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-gdtoa-gethex.o)
@@ -1966,7 +1966,7 @@ __sseek                                           C:/arm-gnu-toolchain-15.2.rel1
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-findfp.o)
 __ssprint_r                                       C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-svfprintf.o)
 __ssputs_r                                        C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-svfprintf.o)
-__start                                           Board/NUCLEO_F411RE/crt0.o
+__start                                           D:\Project\Framework_Study\Testbench\uart_echo\build\Board_NUCLEO_F411RE_crt0.s.o
 __stdio_exit_handler                              C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-findfp.o)
 __subdf3                                          C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/thumb/v7e-m+fp/hard\libgcc.a(_arm_addsubdf3.o)
 __swbuf                                           C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-wbuf.o)
@@ -2112,7 +2112,7 @@ _write_r                                          C:/arm-gnu-toolchain-15.2.rel1
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-stdio.o)
 abort                                             C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-abort.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-assert.o)
-delay_ms                                          Core/System/systick.o
+delay_ms                                          D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
 end                                               C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libnosys.a(sbrk.o)
 errno                                             C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-reent.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libnosys.a(write.o)
@@ -2136,27 +2136,27 @@ fiprintf                                          C:/arm-gnu-toolchain-15.2.rel1
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-assert.o)
 fprintf                                           C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-fprintf.o)
 free                                              C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-malloc.o)
-insert_queue                                      MCAL/Target/STM32F4xx/stm32_queue.o
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
+insert_queue                                      D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 localeconv                                        C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-localeconv.o)
 malloc                                            C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-malloc.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-mprec.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-dtoa.o)
-mcal_timer_int_enable                             MCAL/Target/STM32F4xx/stm32_timer.o
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
-mcal_timer_oneshot_init                           MCAL/Target/STM32F4xx/stm32_timer.o
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
-mcal_timer_repeat_init                            MCAL/Target/STM32F4xx/stm32_timer.o
-mcal_timer_start                                  MCAL/Target/STM32F4xx/stm32_timer.o
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
-mcal_timer_stop                                   MCAL/Target/STM32F4xx/stm32_timer.o
-mcal_uart_init                                    MCAL/Target/STM32F4xx/stm32_uart.o
-                                                  Core/main.o
-mcal_uart_read                                    MCAL/Target/STM32F4xx/stm32_uart.o
-                                                  Test/uart_test.o
-mcal_uart_write                                   MCAL/Target/STM32F4xx/stm32_uart.o
-                                                  Test/uart_test.o
-                                                  Core/main.o
+mcal_timer_int_enable                             D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+mcal_timer_oneshot_init                           D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+mcal_timer_repeat_init                            D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+mcal_timer_start                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+mcal_timer_stop                                   D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_timer.c.o
+mcal_uart_init                                    D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+mcal_uart_read                                    D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+mcal_uart_write                                   D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
 memchr                                            C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-memchr.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-fvwrite.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf.o)
@@ -2181,16 +2181,16 @@ nan                                               C:/arm-gnu-toolchain-15.2.rel1
 nanf                                              C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libm_a-sf_nan.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfscanf_float.o)
-queue_empty                                       MCAL/Target/STM32F4xx/stm32_queue.o
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
-queue_full                                        MCAL/Target/STM32F4xx/stm32_queue.o
-queue_init                                        MCAL/Target/STM32F4xx/stm32_queue.o
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
+queue_empty                                       D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+queue_full                                        D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+queue_init                                        D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 raise                                             C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-signal.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-abort.o)
-read_queue                                        MCAL/Target/STM32F4xx/stm32_queue.o
-                                                  MCAL/Target/STM32F4xx/stm32_uart.o
-rx_cnt                                            MCAL/Target/STM32F4xx/stm32_uart.o
+read_queue                                        D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_queue.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+rx_cnt                                            D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 setlocale                                         C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-locale.o)
 signal                                            C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-signal.o)
 siprintf                                          C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-sprintf.o)
@@ -2200,7 +2200,7 @@ strcmp                                            C:/arm-gnu-toolchain-15.2.rel1
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-locale.o)
 strlen                                            C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strlen.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf_float.o)
-                                                  Core/main.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
 strncmp                                           C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strncmp.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-gdtoa-gethex.o)
                                                   C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
@@ -2210,24 +2210,24 @@ strtof                                            C:/arm-gnu-toolchain-15.2.rel1
 strtof_l                                          C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtod.o)
 strtol                                            C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtol.o)
 strtol_l                                          C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strtol.o)
-systick_check_timeout                             Core/System/systick.o
-systick_get_load_time                             Core/System/systick.o
-systick_get_time                                  Core/System/systick.o
-systick_run                                       Core/System/systick.o
-systick_stop                                      Core/System/systick.o
-tb_last_read                                      Test/uart_test.o
-tb_last_write                                     Test/uart_test.o
-tb_rx_bytes                                       Test/uart_test.o
-tb_skipped_nuls                                   Test/uart_test.o
-tb_tx_bytes                                       Test/uart_test.o
-tb_tx_failed                                      Test/uart_test.o
-uart1_q                                           MCAL/Target/STM32F4xx/stm32_uart.o
-uart2_q                                           MCAL/Target/STM32F4xx/stm32_uart.o
-uart6_q                                           MCAL/Target/STM32F4xx/stm32_uart.o
-uart_rx_gpio_confirm                              MCAL/Target/STM32F4xx/stm32_uart.o
-uart_test_main                                    Test/uart_test.o
-                                                  Core/main.o
-uart_timeout_tick                                 MCAL/Target/STM32F4xx/stm32_uart.o
-uart_tx_gpio_confirm                              MCAL/Target/STM32F4xx/stm32_uart.o
+systick_check_timeout                             D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+systick_get_load_time                             D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+systick_get_time                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+systick_run                                       D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+systick_stop                                      D:\Project\Framework_Study\Testbench\uart_echo\build\Core_System_systick.c.o
+tb_last_read                                      D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+tb_last_write                                     D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+tb_rx_bytes                                       D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+tb_skipped_nuls                                   D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+tb_tx_bytes                                       D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+tb_tx_failed                                      D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+uart1_q                                           D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+uart2_q                                           D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+uart6_q                                           D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+uart_rx_gpio_confirm                              D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+uart_test_main                                    D:\Project\Framework_Study\Testbench\uart_echo\build\Testbench_uart_echo_uart_echo_test.c.o
+                                                  D:\Project\Framework_Study\Testbench\uart_echo\build\Core_main.c.o
+uart_timeout_tick                                 D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
+uart_tx_gpio_confirm                              D:\Project\Framework_Study\Testbench\uart_echo\build\MCAL_Target_STM32F4xx_stm32_uart.c.o
 vfiprintf                                         C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf.o)
 vfprintf                                          C:/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin/../lib/gcc/arm-none-eabi/15.2.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-vfprintf.o)

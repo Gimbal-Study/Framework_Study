@@ -20,28 +20,28 @@ bool read_queue(queue_t *q, uint8_t *data)
 {
 	if (queue_empty(q))
 	    return false;
-	
-	q->front = (q->front + 1) % QUEUE_MAX;
+
 	*data =  (q->data_array[q->front]);
+	q->front = (q->front + 1) % QUEUE_MAX;
 	
 	return true;
 }
 
 void queue_init(queue_t *q)  // queue가 텅 빈경우 fron와 rear가 동일한 위치를 가리틴다.
 {
-	q->front=-1;   // read index
-	q->rear=-1;    // insert index
+	q->front= 0;   // read index
+	q->rear = 0;    // insert index
 }
 
-void insert_queue(queue_t *q, uint8_t value)
+bool insert_queue(queue_t *q, uint8_t value)
 {
 	if (queue_full(q))
 	{
-		return;
+		return false;
 	}
-	else   // save
-	{
-		q->rear = (q->rear + 1) % QUEUE_MAX;
-		q->data_array[q->rear]=value;
-	}
+	
+	q->data_array[q->rear]=value;
+	q->rear = (q->rear + 1) % QUEUE_MAX;
+
+	return true;
 }

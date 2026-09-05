@@ -1,5 +1,5 @@
-#ifndef MCAL_COMMON_H
-#define MCAL_COMMON_H
+#ifndef COMMON_H
+#define COMMON_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -21,8 +21,8 @@ typedef enum
 
 typedef struct
 {
-    int front;
-    int rear;
+    uint16_t front;
+    uint16_t rear;
     uint8_t data_array[QUEUE_MAX];
 } queue_t;
 
@@ -30,7 +30,7 @@ int queue_full(queue_t *q);
 int queue_empty(queue_t *q);
 bool read_queue(queue_t *q, uint8_t *data);
 void queue_init(queue_t *q);
-void insert_queue(queue_t *q, uint8_t value);
+bool insert_queue(queue_t *q, uint8_t value);
 
 
 #endif /* MCAL_COMMON_H */

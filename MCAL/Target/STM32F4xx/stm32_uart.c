@@ -7,7 +7,7 @@
 #include <mcal_timer.h>
 
 void Uart_Send_Byte(USART_TypeDef *uart_instance, char data);
-bool uart_timeout_tick(uint16_t time);
+bool uart_timeout_tick(uint8_t timer_instance, uint16_t time);
 
 /*USARTx_Pin_Map for STM32*/
 static const Stm32_UartPinConfigType uart1_pinmap =
@@ -55,6 +55,7 @@ queue_t uart2_q;
 queue_t uart6_q;
 
 volatile uint8_t Uart2_Rx_Expired = 0;
+volatile uint8_t rx_cnt = 0;
 
 uart_gpio_t uart_tx_gpio_confirm(uint8_t uart_instance, const Stm32_UartPinConfigType *uart_pinmap)
 {
@@ -212,7 +213,7 @@ mcal_uart_status_t mcal_uart_init(uint8_t uart_instance, uint32_t baud, mcal_par
 mcal_uart_status_t mcal_uart_write(uint8_t uart_instance, const uint8_t *data, uint16_t len, uint16_t timeout)
 {
   mcal_timer_start(2);
-
+  uint8_t *data8b_ptr = (uint8_t *)data;
   static const Stm32_UartPinConfigType *uart_s;
 
   switch (uart_instance)
@@ -236,7 +237,7 @@ mcal_uart_status_t mcal_uart_write(uint8_t uart_instance, const uint8_t *data, u
 
   for (int i = 0; i < len; i++)
   {
-    Uart_Send_Byte(uart_s->USART_target, *data++);
+    Uart_Send_Byte(uart_s->USART_target, *data8b_ptr++);
   }
 
   return MCAL_UART_OK;
@@ -246,6 +247,7 @@ mcal_uart_status_t mcal_uart_read(uint8_t uart_instance, uint8_t *data, uint16_t
 {
   // mcal_timer_
   queue_t *uart_q;
+  uint8_t *data8b_ptr = data;
 
   switch (uart_instance)
   {
@@ -263,21 +265,20 @@ mcal_uart_status_t mcal_uart_read(uint8_t uart_instance, uint8_t *data, uint16_t
 
   default:
     return MCAL_UART_ERROR;
-    break;
   }
 
   // while(시간이 timeout이 넘었거나 || uart_q-> rear - uart_q->front == len)
 
-  if (!queue_empty(uart_q))
+  for (int i = 0; i < len; i++)
   {
-    for (int i = 0; i < len; i++)
-    {
-      read_queue(uart_q, data++);
-    }
+    if (queue_empty(uart_q))
+      return MCAL_UART_ERROR;
+
+    if (!read_queue(uart_q, data8b_ptr++))
+      return MCAL_UART_ERROR;
   }
 
-  else
-    return MCAL_UART_ERROR;
+  *data8b_ptr = '\0';
 
   return MCAL_UART_OK;
 }
@@ -350,6 +351,16 @@ mcal_uart_status_t mcal_uart_Rx_Handler(uint8_t uart_instance)
 }
 #endif
 
+bool uart_timeout_tick(uint8_t timer_instance, uint16_t time)
+{
+  bool tick_result;
+  mcal_timer_oneshot_init(timer_instance, 50000, 40000);
+  mcal_timer_int_enable(timer_instance, 1);
+  tick_result = mcal_timer_start(timer_instance);
+
+  return tick_result;
+}
+
 void USART1_IRQHandler(void)
 {
   if (MCAL_CHECK_BIT_SET(USART1->SR, 5))
@@ -357,20 +368,26 @@ void USART1_IRQHandler(void)
     uint8_t data = USART1->DR;
 
     insert_queue(&uart1_q, data);
+
     NVIC_ClearPendingIRQ(USART1_IRQn);
   }
 }
 
+// const uint8_t *Uart2_IRQ_msg = "Uart_Inturrpt Occured\n";
+// const uint8_t *Uart2_Expired_msg = "Uart2_Expitred!!\n";
 void USART2_IRQHandler(void)
 {
-  if (MCAL_CHECK_BIT_SET(USART2->SR, 5))
-  {
-    uint8_t data = USART2->DR;
-    Uart2_Rx_Expired = 1;
+  uint8_t data = USART2->DR;
 
-    insert_queue(&uart2_q, data);
-    NVIC_ClearPendingIRQ(USART2_IRQn);
+  if (!insert_queue(&uart2_q, data))
+    return;
+  if (data == '\n')
+  {
+    insert_queue(&uart2_q, '\0');
+    Uart2_Rx_Expired = 1;
   }
+
+  NVIC_ClearPendingIRQ(USART2_IRQn);
 }
 
 void USART6_IRQHandler(void)
@@ -382,11 +399,4 @@ void USART6_IRQHandler(void)
     insert_queue(&uart6_q, data);
     NVIC_ClearPendingIRQ(USART6_IRQn);
   }
-}
-
-bool uart_timeout_tick(uint8_t timer_instance, uint16_t time)
-{
-  mcal_timer_oneshot_init(timer_instance, 50000, 40000);
-  mcal_timer_int_enable(timer_instance, 1);
-  mcal_timer_start();
 }

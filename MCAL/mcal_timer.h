@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#include "mcal_common.h"
+#include "common.h"
 #include "macro.h"
 
 #define sg      0
