@@ -3,7 +3,6 @@
 #include <common.h>
 #include "mcal_macro.h"
 
-
 bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32 Freq)
 {
     if(/* channel == ??? ||*/ Freq == 0)
@@ -173,6 +172,7 @@ static mcal_i2c_status_t i2c_validate_transfer(uint16_t dev_addr,
         return MCAL_I2C_ERROR;
     if (timeout_ms == 0U)
         return MCAL_I2C_TIMEOUT;
+        
     return MCAL_I2C_OK;
 }
 
@@ -259,12 +259,12 @@ static void i2c_abort(I2C_TypeDef *i2c,
 /* START -> device(W) -> optional memory address -> data -> STOP */
 mcal_i2c_status_t mcal_i2c_write(uint8_t channel, uint16_t dev_addr,
     uint16_t mem_addr, uint8_t mem_addr_size,
-    const uint8_t *data, uint16_t len, unsigned int timeout)
+    const uint8_t *data, uint16_t len, uint32_t timeout)
 {
     I2C_TypeDef *i2c;
     mcal_i2c_status_t status;
     uint32_t started;
-    uint32_t timeout_ms = (uint32_t)timeout;
+    uint32_t timeout_ms = timeout;
     status = i2c_validate_transfer(dev_addr, mem_addr, mem_addr_size,
         data, len, timeout_ms);
     if (status != MCAL_I2C_OK)
