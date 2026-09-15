@@ -63,7 +63,13 @@ Task 확인
 
 ## 4. Skill Usage
 
-작업에 필요한 상세 규칙은 해당 Skill 문서를 따른다.
+작업에 필요한 상세 규칙은 Repository Skill 문서를 따른다.
+
+Repository Skill은 다음 공식 Codex 경로에 둔다.
+
+```text
+.agents/skills/<skill-name>/SKILL.md
+```
 
 Agent는 작업을 시작하기 전에 현재 작업과 관련된 Skill이 존재하는지 확인한다.
 
@@ -87,7 +93,62 @@ Skill이 존재하지 않는 영역에서는 기존 코드와 프로젝트 구�
 
 ## 5. Change Policy
 
-코드를 변경할 때 다음 원칙을 따른다.
+### Modification Authorization
+
+Agent는 사용자가 코드 또는 설정 변경을 명시적으로 요청하기 전까지
+Read-Only로 동작한다.
+
+다음 요청은 변경 권한을 부여하지 않는다.
+
+* 확인
+* 분석
+* 설명
+* 검토
+* 변경 방법 문의
+* 변경 위치 문의
+
+명시적인 변경 요청의 예:
+
+* 코드 수정해
+* 코드 적용해
+* 코드 추가해
+* 내용 삭제해
+* 코드 만들어줘
+* 설정을 바꿔
+
+다음과 같이 대상과 변경 의도가 불명확한 표현만으로는 변경하지 않는다.
+
+* 수정해
+* 만들어
+* 권한을 요청해봐
+
+변경 여부가 불명확하면 Read-Only로 분석하고 사용자에게 확인한다.
+
+### Protected Files
+
+명시적인 변경 요청 없이는 다음 파일을 변경하지 않는다.
+
+* Source / Header
+* Test Code
+* Build / Linker Script
+* Generated Project File
+* `.vscode/`, `.clang-format`
+* `.project`, `.cproject`, `.ioc`
+* Makefile 및 IDE User Settings
+
+### Before Modification
+
+변경 전에 다음을 사용자에게 알린다.
+
+* 변경할 파일
+* 변경할 내용
+* 예상되는 영향
+
+그 후 명시적인 변경 요청 범위 안에서만 작업한다.
+
+### Change Principles
+
+코드 또는 설정을 변경할 때 다음 원칙을 따른다.
 
 1. 작업과 직접 관련된 범위만 수정한다.
 2. 기존 구현과 Interface를 먼저 확인한다.
@@ -167,6 +228,8 @@ Assumptions
 Agent의 역할은 프로젝트의 기존 구조를 임의로 재설계하는 것이 아니라,
 현재 구조와 Interface를 이해한 후 요구사항을 만족하는 최소 변경을 수행하는 것이다.
 
-세부적인 Architecture Rule, Test Rule, Hardware Access Rule,
-Permission Rule 등은 AGENTS.md에 중복하여 작성하지 않고
-각 Skill 또는 Harness 문서에서 관리한다.
+세부적인 Architecture Rule, Test Rule, Hardware Access Rule은
+AGENTS.md에 중복하여 작성하지 않고 `.agents/skills/`에서 관리한다.
+
+반드시 모든 작업에 적용해야 하는 Permission Rule은 이 AGENTS.md에서 관리한다.
+`harness/`는 자동 지침 디렉터리가 아니라 Build/Test 검증 스크립트를 두는 위치로 사용한다.

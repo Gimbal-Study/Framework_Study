@@ -1,4 +1,9 @@
-# Architecture Skill
+---
+name: architecture
+description: Apply Gimbal Framework layer, dependency, code-placement, hardware-access, and public-interface rules when adding, moving, refactoring, or reviewing architecture-related code.
+---
+
+# Architecture
 
 ## Purpose
 

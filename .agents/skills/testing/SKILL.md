@@ -1,4 +1,9 @@
-# Testing Skill
+---
+name: testing
+description: Create, modify, run, or review Gimbal Framework embedded tests and test harness behavior, including assertions, result reporting, and hardware-dependent verification.
+---
+
+# Testing
 
 ## Purpose
 
@@ -221,6 +226,20 @@ Skipped : 1
 8. Build한다.
 9. 관련 Test를 실행한다.
 10. 결과를 확인한다.
+
+## Repository Validation
+
+Repository 검증에는 `harness/validate.sh`를 사용한다.
+
+```bash
+./harness/validate.sh
+```
+
+Build 또는 Target Test 명령이 준비된 경우 환경 변수로 전달한다.
+
+```bash
+BUILD_CMD="make" TEST_CMD="..." ./harness/validate.sh
+```
 
 ## Failure Handling
 

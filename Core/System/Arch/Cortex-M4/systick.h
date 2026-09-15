@@ -7,8 +7,13 @@
 #ifndef SYSTICK_H
 #define SYSTICK_H
 
+#include <stdint.h>
 
 void systick_run(unsigned int msec);
+
+void systick_run_interrupt(unsigned int msec);
+
+uint32_t systick_get_elapsed_msec(void);
 
 int systick_check_timeout(void);
 
@@ -20,5 +25,6 @@ void systick_stop(void);
 
 void delay_ms(unsigned int msec);
 
+void systick_irq_handler(void);
 
 #endif /* SYSTICK_H */
