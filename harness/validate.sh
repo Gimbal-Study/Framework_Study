@@ -74,9 +74,8 @@ check_required_files()
 
     for file in \
         "AGENTS.md" \
-        "skills/architecture.md" \
-        "skills/testing.md" \
-        "harness/permissions.md"
+        ".agents/skills/architecture/SKILL.md" \
+        ".agents/skills/testing/SKILL.md"
     do
         if [ ! -f "${PROJECT_ROOT}/${file}" ]; then
             printf '  missing: %s\n' "${file}"

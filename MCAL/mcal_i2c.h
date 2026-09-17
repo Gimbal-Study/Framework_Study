@@ -13,152 +13,19 @@
 extern "C" {
 #endif
 
-#include "mcal_common.h"
 
-
-/* =========================================================================
- * I2C Instance
- * =========================================================================
- *
- * Logical I2C peripheral identifier.
- *
- * Example:
- *
- *     MCAL_I2C_1
- *         ├── STM32 -> I2C1
- *         ├── AVR   -> TWI0
- *         └── RPi   -> /dev/i2c-1
- *
- * The actual hardware mapping is platform-dependent.
- * ========================================================================= */
-
-typedef uint8_t mcal_i2c_instance_t;
-
-
-/* =========================================================================
- * I2C Address
- * ========================================================================= */
-
-typedef uint8_t mcal_i2c_address_t;
-
-
-/* =========================================================================
- * I2C Status
- * ========================================================================= */
-
-typedef enum
-{
+// 함수 초안을 미리 올려놨습니다. 회의 때 구체적으로 짜봅시다.
+typedef enum {
     MCAL_I2C_OK = 0,
-    MCAL_I2C_BUSY,
     MCAL_I2C_ERROR,
-    MCAL_I2C_TIMEOUT,
-    MCAL_I2C_NACK
+    MCAL_I2C_BUSY,
+    MCAL_I2C_TIMEOUT    
 } mcal_i2c_status_t;
 
-
-/* =========================================================================
- * I2C ERROR Status
- * ========================================================================= */
-
-typedef enum
-{
-    MCAL_I2C_ERROR_NONE = 0,
-    MCAL_I2C_ERROR_NACK,
-    MCAL_I2C_ERROR_BUS,
-    MCAL_I2C_ERROR_ARBITRATION,
-    MCAL_I2C_ERROR_OVERRUN
-} mcal_i2c_error_t;
-
-
-/* =========================================================================
- * I2C Transfer Direction
- * ========================================================================= */
-
-typedef enum
-{
-    MCAL_I2C_WRITE = 0,
-    MCAL_I2C_READ
-
-} mcal_i2c_direction_t;
-
-
-/* =========================================================================
- * I2C Transaction
- * ========================================================================= */
-
-typedef struct
-{
-    mcal_i2c_address_t address;
-
-    mcal_i2c_direction_t direction;
-
-    uint8_t *data;
-
-
-    size_t length;
-
-} mcal_i2c_transaction_t;
-
-
-/* =========================================================================
- * Initialization
- * ========================================================================= */
-
-/**
- * @brief Initialize I2C MCAL.
- */
-void mcal_i2c_init(void);
-
-
-/* =========================================================================
- * Blocking Transfer API
- * ========================================================================= */
-
-/**
- * @brief Transmit data to an I2C slave.
- *
- * @param[in] instance I2C instance.
- * @param[in] address  7-bit slave address.
- * @param[in] data     Data buffer.
- * @param[in] length   Number of bytes.
- *
- * @return I2C transfer status.
- */
-mcal_i2c_status_t mcal_i2c_write(mcal_i2c_instance_t instance, mcal_i2c_address_t address, uint8_t reg, uint8_t data);
-
-
-/**
- * @brief Receive data from an I2C slave.
- *
- * @param[in] instance I2C instance.
- * @param[in] address  7-bit slave address.
- * @param[out] data    Receive buffer.
- * @param[in] length   Number of bytes.
- *
- * @return I2C transfer status.
- */
-mcal_i2c_status_t mcal_i2c_read(mcal_i2c_instance_t instance, mcal_i2c_address_t address, uint8_t reg, uint8_t *data);
-
-
-/* Burst */
-
-mcal_status_t  mcal_i2c_burst_read(
-    mcal_i2c_instance_t instance,
-    mcal_i2c_address_t address,
-    uint8_t start_reg,
-    uint8_t *data,
-    uint16_t size,
-    mcal_i2c_error_t *error
-);
-
-mcal_status_t  mcal_i2c_burst_write(
-    mcal_i2c_instance_t instance,
-    mcal_i2c_address_t address,
-    uint8_t start_reg,
-    const uint8_t *data,
-    uint16_t size,
-    mcal_i2c_error_t *error
-);
+// 필요 매개 변수: channel(i2cx: x에 해당하는 장치, 모드, Freq
+bool mcal_i2c_init(uint8_t i2c_instance, uint8_t mode, uint32_t Freq);
+mcal_i2c_status_t mcal_i2c_write(uint8_t i2c_instance, uint8_t dev_addr, uint8_t reg_addr, const uint8_t *data, uint16_t len, uint16_t timeout);
+mcal_i2c_status_t mcal_i2c_read(uint8_t i2c_instance, uint8_t dev_addr, uint8_t reg_addr, uint8_t *data, uint16_t len, uint16_t timeout);
 
 #ifdef __cplusplus
 }
