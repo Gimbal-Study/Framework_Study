@@ -208,7 +208,7 @@ static mcal_i2c_status_t i2c_mem_addr_write(I2C_TypeDef *i2c,
         return MCAL_I2C_ERROR;
     if (mem_addr_size == 0U)
         return MCAL_I2C_OK;
-    if (mem_addr_size == 2U)
+    else if (mem_addr_size == 2U)
     {
         status = i2c_wait_event(i2c, I2C_SR1_TXE, started, timeout_ms);
         if (status != MCAL_I2C_OK)
@@ -310,7 +310,7 @@ fail:
  */
 mcal_i2c_status_t mcal_i2c_read(uint8_t channel, uint16_t dev_addr,
     uint16_t mem_addr, uint8_t mem_addr_size,
-    uint8_t *data, uint16_t len, unsigned int timeout)
+    uint8_t *data, uint16_t len, uint32_t timeout)
 {
     I2C_TypeDef *i2c;
     mcal_i2c_status_t status;
