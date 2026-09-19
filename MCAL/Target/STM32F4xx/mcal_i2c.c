@@ -3,21 +3,68 @@
 #include <common.h>
 #include <macro.h>
 
-#define I2C_TIMER_INSTANCE 2
+#define I2C_TIMER_INSTANCE  4U
+#define I2C_TIMEOUT_MAX_MS  60000U
 
-/* 인터럽트와 메인 코드가 공유하므로 volatile 선언 필수 */
-static volatile uint32_t g_i2c_timer_ms = 0;
+static volatile uint32_t g_i2c_timer_ms = 0U;
+static bool g_i2c_timer_initialized = false;
 
-// TIM2 인터럽트 핸들러 (1ms마다 호출)
-void TIM2_IRQHandler(void)
+/* TIM4 업데이트 인터럽트: 1ms마다 누적값 증가 */
+void TIM4_IRQHandler(void)
 {
-    // 알람 깃발(UIF)이 떴는지 확인
-    if (TIM2->SR & TIM_SR_UIF)
-    {
-        TIM2->SR &= ~TIM_SR_UIF;         // 알람 깃발 수동 클리어 (필수)
-        NVIC_ClearPendingIRQ(TIM2_IRQn); // NVIC 펜딩 클리어
-        g_i2c_timer_ms++;                // 1ms 경과 카운트 증가
+    if ((TIM4->SR & TIM_SR_UIF) != 0U) {
+        /*
+         * TIM4는 I2C 시간원 전용.
+         * 다른 캡처/비교 이벤트는 사용하지 않는다.
+         */
+        TIM4->SR = 0U;
+        ++g_i2c_timer_ms;
     }
+}
+
+/* I2C 내부에서 사용하는 밀리초 시간값 */
+static uint32_t i2c_time_ms(void)
+{
+    return g_i2c_timer_ms;
+}
+
+/* 타이머와 인터럽트 경로가 활성화되어 있는지 확인 */
+static bool i2c_timebase_running(void)
+{
+    if (!g_i2c_timer_initialized)
+        return false;
+
+    if ((RCC->APB1ENR & RCC_APB1ENR_TIM4EN) == 0U)
+        return false;
+
+    if ((TIM4->CR1 & TIM_CR1_CEN) == 0U)
+        return false;
+
+    if ((TIM4->DIER & TIM_DIER_UIE) == 0U)
+        return false;
+
+    if (NVIC_GetEnableIRQ(TIM4_IRQn) == 0U)
+        return false;
+
+    return true;
+}
+
+
+/*
+ * 인터럽트로 시간이 증가하는 방식이므로,
+ * blocking I2C는 인터럽트가 허용된 메인 코드에서 사용한다.
+ */
+static bool i2c_timeout_context_ready(void)
+{
+    if (__get_IPSR() != 0U)
+        return false;
+
+    if (__get_PRIMASK() != 0U ||
+        __get_BASEPRI() != 0U ||
+        __get_FAULTMASK() != 0U)
+        return false;
+
+    return i2c_timebase_running();
 }
 
 bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32_t Freq)

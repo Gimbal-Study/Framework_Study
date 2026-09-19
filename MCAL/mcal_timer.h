@@ -32,4 +32,8 @@ bool mcal_timer_int_enable(uint8_t timer_instance, bool act);
 bool mcal_timer_start(uint8_t timer_instance);
 void mcal_timer_stop(uint8_t timer_instance);
 
+bool mcal_timer_timebase_init(void);
+bool mcal_timer_timebase_ready(void);
+uint32_t mcal_timer_get_ms(void);
+
 #endif
