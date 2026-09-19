@@ -23,12 +23,6 @@
 | `MPU6050_Read` | 가속도 g, 각속도 degrees/s, 칩 온도 Celsius 변환 |
 | `MPU6050_CalibrateGyro` | 정지 상태에서 새로운 샘플들의 평균으로 소프트웨어 자이로 bias 계산 |
 | `MPU6050_ClearGyroBias` | 자이로 소프트웨어 보정값 0으로 초기화 |
-| `MPU6050_DMPInitialize` | MotionApps 2.0 DMP 펌웨어 업로드/검증, DMP/FIFO 설정 |
-| `MPU6050_SetDMPEnabled` | DMP 실행/정지 |
-| `MPU6050_GetFIFOCount` | FIFO에 쌓인 현재 바이트 수 확인 |
-| `MPU6050_ReadFIFO` | FIFO 데이터 burst read |
-| `MPU6050_ReadDMPPacket` | 완성된 42-byte DMP packet 1개 읽기 및 overflow 처리 |
-| `MPU6050_DMPGetQuaternion` | 42-byte packet에서 Q14 quaternion 추출 |
 
 기본값: I2C 채널 1, 7비트 주소 `0x68`, 가속도 ±2g, 자이로 ±500°/s,
 DLPF=3(자이로 42 Hz/가속도 44 Hz), 분주값 4(200 Hz), I2C timeout 20 ms.
@@ -39,40 +33,38 @@ DLPF=3(자이로 42 Hz/가속도 44 Hz), 분주값 4(200 Hz), I2C timeout 20 ms.
 AD0 HIGH이면 config.address만 `0x69`로 설정합니다. WHO_AM_I는 두 주소에서 모두 `0x68`입니다.
 원본의 `0x34` 비교는 WHO_AM_I의 bit 6:1만 추출한 결과라는 차이가 있습니다.
 
-## 현재 통합 상태
+## 먼저 해결해야 할 기존 MCAL 통합 문제
 
-이번 변경에서 MPU/DMP 경로가 실제 프로젝트 MCAL API와 맞도록 정리되었습니다.
+센서 파일은 실제 `mcal_i2c.h`로 컴파일 검증했지만, 현재 저장소의 **MCAL 구현 자체는
+컴파일 및 하드웨어 초기화가 완료되지 않은 상태**입니다. 기존 MCAL/메인/Makefile은 수정하지 않았습니다.
 
-- `read_bytes()`는 현재 `mcal_i2c_read(..., mem_addr_size, ...)` 서명에 맞춰
-  MPU6050의 8-bit 레지스터 주소 크기 `1U`를 전달합니다.
-- `mcal_i2c_init()`는 I2C1(PB6/PB7)과 I2C2(PB10/PB11), Standard/Fast mode,
-  CCR/TRISE/PE 설정까지 완료합니다.
-- I2C timeout은 Cortex-M4 DWT cycle counter를 사용하므로 기존의 미구현
-  `mcal_time_ms()`에 의존하지 않습니다.
-- 루트 Makefile에 I2C MCAL과 MPU6050 소스/헤더 경로를 포함했습니다.
-- `MPU6050_C=0`으로 전체 드라이버가 빌드에서 제외되던 가드를 제거했습니다.
-- MotionApps 2.0의 1929-byte DMP image를 bank 단위로 업로드하고 매 chunk를
-  read-back 검증한 뒤 FIFO/DMP를 설정합니다.
+1. `MCAL/Target/STM32F4xx/mcal_i2c.c`의 `mcal_i2c_init()`에 정의되지 않은 `uint32`가
+   사용됩니다. 공개 헤더와 동일한 `uint32_t`가 필요합니다.
+2. `mcal_i2c_read()`의 공개 헤더에는 `mem_addr_size`가 없지만 구현에는 있습니다.
+   이 드라이버는 **현재 공개 헤더**를 호출합니다. 헤더를 유지할 경우 구현을
+   아래 서명으로 맞추고 함수 내부에서 `const uint8_t mem_addr_size = 1U;`로
+   고정하는 방법이 있습니다. 16비트 주소가 필요한 다른 장치를 위해서는 별도 확장 API가 적합합니다.
 
-실제 보드에서는 배선, AD0 주소, 외부 pull-up 상태를 포함한 하드웨어 검증이
-여전히 필요합니다. 먼저 WHO_AM_I(0x68), 그 다음 DMP 초기화와 FIFO count 증가,
-마지막으로 42-byte packet 수신 순서로 확인하세요.
+   ```c
+   mcal_i2c_status_t mcal_i2c_read(uint8_t channel, uint16_t dev_addr,
+       uint16_t reg_addr, uint8_t *data, uint16_t len, uint32_t timeout);
+   ```
 
-## DMP 사용 순서
+3. I2C 초기화의 GPIO MODER 쓰기에 여분의 닫는 괄호가 있고,
+   PB7이 Alternate Function의 `10b`가 아닌 `11b`로 설정되어 있습니다.
+   CCR/TRISE/PE 설정, 성공 반환, 채널 및 mode 처리도 아직 완성되지 않았습니다.
+   현재 구현이 핀을 설정하는 대상은 I2C1(PB6/PB7)뿐입니다.
+4. MCAL read/write가 호출하는 `mcal_time_ms()`의 구현이 없습니다.
+   대기 중에도 증가하는 단조로운 millisecond timebase가 필요합니다.
+   기존 `delay_ms()`는 SysTick을 시작/정지하는 방식이므로 이를 그대로
+   상시 millisecond tick으로 간주할 수 없습니다. MPU delay 콜백과 MCAL
+   timeout timebase가 서로의 타이머를 중지/재설정하지 않도록 구성해야 합니다.
+5. 현재 루트 Makefile은 UART 테스트를 빌드하며 I2C/MPU 소스가 포함되어 있지 않습니다.
+   I2C와 시간 기반 구현을 완성한 뒤 `MCAL/Target/STM32F4xx/mcal_i2c.c`,
+   `Devie/Sensor/MPU6050.c`, timebase 소스를 빌드에 포함하고
+   `Devie/Sensor`, `MCAL`, `Common` 등의 include 경로를 설정하세요.
 
-```text
-MPU6050_Init()
-    ↓
-MPU6050_DMPInitialize()
-    ↓  1929-byte DMP firmware upload + verify
-MPU6050_SetDMPEnabled(true)
-    ↓
-DMP가 42-byte packet을 FIFO에 적재
-    ↓
-MPU6050_ReadDMPPacket()
-    ↓
-MPU6050_DMPGetQuaternion()
-```
+이 문제들을 해결하기 전에는 센서 드라이버만 추가해도 보드에서 바로 실행되지 않습니다.
 
 ## 사용 예시 (MCAL/보드 초기화 완료 후)
 
@@ -141,7 +133,7 @@ device 구조체는 0으로 초기화하고 초기화 이후 필드를 직접 �
 - 출력은 센서 XYZ 기준입니다. 장착 방향에 따른 축 교환/부호 변경, timestamp와 실제 dt,
   자세 추정(상보 필터 등), PID, 모터 출력은 상위 계층에서 처리하세요.
   자이로 각속도는 각도가 아니며, MPU6050만으로 절대 yaw를 안정적으로 얻을 수는 없습니다.
-- DMP/FIFO 경로는 구현되어 있습니다. 외부 자력계 제어는 아직 범위에 포함하지 않았습니다.
+- DMP/FIFO/외부 자력계 제어는 현재 범위에 포함하지 않았습니다.
 
 ## 검증
 

@@ -1,7 +1,7 @@
 #include "mcal_i2c.h"
 #include "stm32f411xe.h"
 #include <common.h>
-#include "mcal_macro.h"
+#include "macro.h"
 #include "option.h"
 
 static void i2c_timebase_init(void)
