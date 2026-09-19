@@ -2,41 +2,92 @@
 #include "stm32f411xe.h"
 #include <common.h>
 #include "mcal_macro.h"
+#include "option.h"
 
-bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32 Freq)
+static void i2c_timebase_init(void)
 {
-    if(/* channel == ??? ||*/ Freq == 0)
-    {
+    CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+    DWT->CYCCNT = 0U;
+    DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+}
+
+static uint32_t i2c_time_cycles(void)
+{
+    return DWT->CYCCNT;
+}
+
+bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32_t Freq)
+{
+    I2C_TypeDef *i2c_instance;
+    uint32_t pclk_hz = PCLK1;
+    uint32_t pclk_mhz = pclk_hz / 1000000U;
+    uint32_t ccr_val;
+
+    if ((channel < 1U || channel > 2U) ||
+        (mode > 1U) || Freq == 0U ||
+        pclk_mhz < 2U || pclk_mhz > 50U)
         return false;
+
+    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+
+    if (channel == 1U) {
+        i2c_instance = I2C1;
+        RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;
+
+        GPIOB->MODER &= ~((0x3U << (6U * 2U)) | (0x3U << (7U * 2U)));
+        GPIOB->MODER |=  ((0x2U << (6U * 2U)) | (0x2U << (7U * 2U)));
+        GPIOB->OTYPER |= (1U << 6U) | (1U << 7U);
+        GPIOB->OSPEEDR |= (0x3U << (6U * 2U)) | (0x3U << (7U * 2U));
+        GPIOB->PUPDR &= ~((0x3U << (6U * 2U)) | (0x3U << (7U * 2U)));
+        GPIOB->PUPDR |=  (0x1U << (6U * 2U)) | (0x1U << (7U * 2U));
+        GPIOB->AFR[0] &= ~((0xFU << (6U * 4U)) | (0xFU << (7U * 4U)));
+        GPIOB->AFR[0] |=  (0x4U << (6U * 4U)) | (0x4U << (7U * 4U));
+    } else {
+        i2c_instance = I2C2;
+        RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
+
+        GPIOB->MODER &= ~((0x3U << (10U * 2U)) | (0x3U << (11U * 2U)));
+        GPIOB->MODER |=  ((0x2U << (10U * 2U)) | (0x2U << (11U * 2U)));
+        GPIOB->OTYPER |= (1U << 10U) | (1U << 11U);
+        GPIOB->OSPEEDR |= (0x3U << (10U * 2U)) | (0x3U << (11U * 2U));
+        GPIOB->PUPDR &= ~((0x3U << (10U * 2U)) | (0x3U << (11U * 2U)));
+        GPIOB->PUPDR |=  (0x1U << (10U * 2U)) | (0x1U << (11U * 2U));
+        GPIOB->AFR[1] &= ~((0xFU << ((10U - 8U) * 4U)) |
+                           (0xFU << ((11U - 8U) * 4U)));
+        GPIOB->AFR[1] |=  (0x4U << ((10U - 8U) * 4U)) |
+                          (0x4U << ((11U - 8U) * 4U));
     }
 
-    // 2. 하드웨어 주변장치 클록 인가 (I2C1, GPIOB)
-    RCC->APB1ENR |= RCC_APB1ENR_I2C1EN; //  (0x1UL << 21U)
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // (0x1UL << 1U)
+    i2c_instance->CR1 &= ~I2C_CR1_PE;
+    i2c_instance->CR1 |= I2C_CR1_SWRST;
+    i2c_instance->CR1 &= ~I2C_CR1_SWRST;
+    i2c_instance->CR2 = (uint32_t)(pclk_mhz & 0x3FU);
 
-    // 3. GPIO 핀 설정 (PB6 = SCL, PB7 = SDA)
-    // MODER: PB6, PB7을 대체 기능 모드(Alternate Function, 10b)로 설정
-    GPIOB->MODER &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
-    GPIOB->MODER |= ((0x2U << (6 * 2)) | (0x3U << (7 * 2)));
+    if (mode == 0U) {
+        if (Freq > 100000U)
+            return false;
+        ccr_val = pclk_hz / (2U * Freq);
+        if (ccr_val < 4U)
+            ccr_val = 4U;
+        if (ccr_val > 0x0FFFU)
+            return false;
+        i2c_instance->CCR = ccr_val;
+        i2c_instance->TRISE = pclk_mhz + 1U;
+    } else {
+        if (Freq > 400000U)
+            return false;
+        ccr_val = pclk_hz / (3U * Freq);
+        if (ccr_val < 1U)
+            ccr_val = 1U;
+        if (ccr_val > 0x0FFFU)
+            return false;
+        i2c_instance->CCR = I2C_CCR_FS | ccr_val;
+        i2c_instance->TRISE = ((pclk_mhz * 300U) / 1000U) + 1U;
+    }
 
-    // OTYPER: I2C 필수 조건인 Open-Drain(1) 설정
-    GPIOB->OTYPER |= (0x1U << 6) | (0x1U << 7);
-
-    // PUPDR: MCU 내부 풀업
-    GPIOB->PUPDR &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
-    GPIOB->PUPDR |= ((0x1U << (6 * 2)) | (0x1U << (7 * 2)));
-
-    // AFR[0]: PB6, PB7에 AF4(I2C1 기능 번호) 부여
-    GPIOB->AFR[0] &= ~((0xFU << (6 * 4)) | (0xFU << (7 * 4)));
-    GPIOB->AFR[0] |= ((0x4U << (6 * 4)) | (0x4U << (7 * 4)));
-
-    // I2C 하드웨어 타이밍 설정
-    // 레지스터 설정 전 반드시 I2C 모듈을 잠시 꺼두어야 함
-    I2C1->CR1 &= ~I2C_CR1_PE; // (0x1UL << 0U)
-
-    // I2C에 APB1 클록 주파수(MHz)를 알려줌
-    // 해당 프로젝트에서는 STM32에 공급되는 주파수가 96MHz. 이것의 절반.
-    I2C1->CR2 = 48; //
+    i2c_instance->CR1 |= I2C_CR1_PE;
+    i2c_timebase_init();
+    return true;
 }
 
 /*
@@ -64,9 +115,6 @@ bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32 Freq)
  * - 실제 적용 전 read 길이 1/2/3/4 이상 및 NACK/timeout을 검증한다.
  */
 
-/* 구현 필요: 1 ms 단위로 증가하는 시간을 반환한다. */
-extern uint32_t mcal_time_ms(void);
-
 #define I2C_DIRECTION_WRITE 0U
 #define I2C_DIRECTION_READ  1U
 #define I2C_ERRORS (I2C_SR1_AF | I2C_SR1_BERR | I2C_SR1_ARLO | I2C_SR1_OVR)
@@ -87,7 +135,15 @@ static I2C_TypeDef *i2c_get_instance(uint8_t channel)
 /* unsigned 뺄셈으로 tick wraparound를 처리한다. */
 static bool i2c_expired(uint32_t started, uint32_t timeout_ms)
 {
-    return (uint32_t)(mcal_time_ms() - started) >= timeout_ms;
+    const uint32_t cycles_per_ms = HCLK / 1000U;
+    uint32_t timeout_cycles;
+
+    if (timeout_ms > (0xFFFFFFFFUL / cycles_per_ms))
+        timeout_cycles = 0xFFFFFFFFUL;
+    else
+        timeout_cycles = timeout_ms * cycles_per_ms;
+
+    return (uint32_t)(i2c_time_cycles() - started) >= timeout_cycles;
 }
 
 /* 오류를 우선 검사하며 SR1 이벤트를 기다린다. */
@@ -274,7 +330,7 @@ mcal_i2c_status_t mcal_i2c_write(uint8_t channel, uint16_t dev_addr,
     status = i2c_check_ready(i2c);
     if (status != MCAL_I2C_OK)
         return status;
-    started = mcal_time_ms();
+    started = i2c_time_cycles();
     i2c->CR1 &= ~(I2C_CR1_ACK | I2C_CR1_POS);
     status = i2c_address_begin(i2c, dev_addr, I2C_DIRECTION_WRITE,
         started, timeout_ms);
@@ -328,7 +384,7 @@ mcal_i2c_status_t mcal_i2c_read(uint8_t channel, uint16_t dev_addr,
     status = i2c_check_ready(i2c);
     if (status != MCAL_I2C_OK)
         return status;
-    started = mcal_time_ms();
+    started = i2c_time_cycles();
     i2c->CR1 = (i2c->CR1 & ~I2C_CR1_POS) | I2C_CR1_ACK;
     if (mem_addr_size != 0U)
     {

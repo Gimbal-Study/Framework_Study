@@ -27,12 +27,15 @@ extern "C" {
 #define MPU6050_REG_INT_STATUS      0x3Au
 #define MPU6050_REG_USER_CTRL       0x6Au
 
-#define REG_PWR_MGMT_2              0x6CU
+#define MPU6050_REG_PWR_MGMT_2       0x6CU
 #define MPU6050_REG_BANK_SEL        0x6Du
 #define MPU6050_REG_MEM_START_ADDR  0x6Eu
 #define MPU6050_REG_MEM_R_W         0x6Fu
 #define MPU6050_REG_DMP_CFG_1       0x70u
 #define MPU6050_REG_DMP_CFG_2       0x71u
+#define MPU6050_REG_FIFO_COUNTH      0x72u
+#define MPU6050_REG_FIFO_COUNTL      0x73u
+#define MPU6050_REG_FIFO_R_W         0x74u
 
 #define MPU6050_REG_WHO_AM_I     0x75U
 #define MPU6050_REG_PWR_MGMT_1   0x6BU
@@ -62,6 +65,7 @@ extern "C" {
 #define MPU6050_DMP_CHUNK_SIZE      16u
 #define MPU6050_DMP_PACKET_SIZE     42u
 #define MPU6050_DMP_FIFO_DIVISOR    1u
+#define MPU6050_FIFO_CAPACITY       1024u
 
 /* REGIETER BIT */
 // associated with dmpinitialize, reset
@@ -77,7 +81,9 @@ typedef enum {
     MPU6050_ERROR_BUSY,
     MPU6050_ERROR_TIMEOUT,
     MPU6050_ERROR_ID,
-    MPU6050_ERROR_VERIFY
+    MPU6050_ERROR_VERIFY,
+    MPU6050_ERROR_DMP_NOT_READY,
+    MPU6050_ERROR_FIFO_OVERFLOW
 } MPU6050_Status;
 
 typedef enum {
@@ -127,8 +133,15 @@ typedef struct {
 typedef struct {
     float accel_g[3];            /* Includes gravity; sensor axes. */
     float gyro_dps[3];           /* Software bias subtracted; degrees/s. */
-    float temperature_c;        /* Die temperature, not ambient. */
+    float temperature_c;         /* Die temperature, not ambient. */
 } MPU6050_Data;
+
+typedef struct {
+    float w;
+    float x;
+    float y;
+    float z;
+} MPU6050_Quaternion;
 
 /* Zero-initialize before first use. Fields are driver-owned after Init.
  * Serialize all access to a device and its I2C bus; no ISR/thread safety. */
@@ -177,6 +190,20 @@ MPU6050_Status MPU6050_ClearGyroBias(MPU6050_Device *device);
 MPU6050_Status MPU6050_DMPInitialize(MPU6050_Device *dev);
 MPU6050_Status MPU6050_SetDMPEnabled(MPU6050_Device *dev, bool enabled);
 MPU6050_Status MPU6050_reset(MPU6050_Device *dev);
+
+MPU6050_Status MPU6050_GetFIFOCount(const MPU6050_Device *dev,
+                                   uint16_t *count);
+MPU6050_Status MPU6050_ReadFIFO(const MPU6050_Device *dev,
+                               uint8_t *data,
+                               uint16_t length);
+MPU6050_Status MPU6050_DMPPacketAvailable(const MPU6050_Device *dev,
+                                         bool *available);
+MPU6050_Status MPU6050_ReadDMPPacket(const MPU6050_Device *dev,
+                                    uint8_t *packet,
+                                    uint16_t packet_capacity,
+                                    bool *ready);
+MPU6050_Status MPU6050_DMPGetQuaternion(const uint8_t *packet,
+                                       MPU6050_Quaternion *quaternion);
 
 
 #ifdef __cplusplus

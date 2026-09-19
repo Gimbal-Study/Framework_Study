@@ -45,10 +45,10 @@ mcal_i2c_status_t mcal_i2c_write(uint8_t channel, uint16_t address,
 }
 
 mcal_i2c_status_t mcal_i2c_read(uint8_t channel, uint16_t address,
-    uint16_t reg, uint8_t *data, uint16_t len, uint32_t timeout)
+    uint16_t reg, uint8_t size, uint8_t *data, uint16_t len, uint32_t timeout)
 {
     assert(channel == 1U && address == expected_address);
-    assert(timeout > 0U && reg + len <= 128U);
+    assert(size == 1U && timeout > 0U && reg + len <= 128U);
     if (++calls == fail_at) {
         data[0] = 0xEEU; /* Model a partially received buffer on error. */
         return failure;

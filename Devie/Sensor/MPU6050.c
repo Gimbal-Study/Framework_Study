@@ -9,10 +9,6 @@
 #include <stddef.h>
 #include <string.h>
 
-#define MPU6050_C       0
-
-
-
 static MPU6050_Status bus_status(mcal_i2c_status_t status)
 {
     switch (status) {
@@ -26,10 +22,11 @@ static MPU6050_Status bus_status(mcal_i2c_status_t status)
 static MPU6050_Status read_bytes(const MPU6050_Device *device, uint8_t reg,
                                  uint8_t *data, uint16_t length)
 {
-    /* mcal_i2c.h: read has an implicit 8-bit register address.
-     * MCAL performs START, register address, repeated START and NACK/STOP. */
+    /* MPU6050 uses one-byte register addresses. MCAL performs START,
+     * register address, repeated START and NACK/STOP. */
     return bus_status(mcal_i2c_read(device->config.channel,
-        device->config.address, reg, data, length, device->config.timeout_ms));
+        device->config.address, reg, 1U, data, length,
+        device->config.timeout_ms));
 };
 
 static MPU6050_Status write_byte(const MPU6050_Device *device,
@@ -49,7 +46,7 @@ static MPU6050_Status check_device(const MPU6050_Device *device)
 
 static bool valid_config(const MPU6050_Config *config)
 {
-    return config != NULL && config->channel >= 1U && config->channel <= 3U &&
+    return config != NULL && config->channel >= 1U && config->channel <= 2U &&
         (config->address == MPU6050_ADDRESS_AD0_LOW ||
          config->address == MPU6050_ADDRESS_AD0_HIGH) &&
         config->timeout_ms != 0U && config->delay_ms != NULL &&
@@ -90,75 +87,6 @@ static int16_t signed_be16(const uint8_t *bytes)
         ? (int32_t)value - 65536L : (int32_t)value;
     return (int16_t)signed_value;
 };
-
-#if 0
-static void MPU6050_setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) {
-    bank &= 0x1F;
-    if (userBank) bank |= 0x20;
-    if (prefetchEnabled) bank |= 0x40;
-    mcal_i2c_write(1, mpu6050.devAddr, MPU6050_REG_BANK_SEL, 1, &bank, 1);
-};
-
-static bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify)
-{
-    return writeMemoryBlock(data, dataSize, bank, address, verify, true);
-};
-
-static MPU6050_Status MPU6050_ReadReg(
-    MPU6050_Device *dev,
-    uint8_t reg,
-    uint8_t *value);
-
-static MPU6050_Status MPU6050_WriteReg(
-    MPU6050_Device *dev,
-    uint8_t reg,
-    uint8_t value);
-
-/* value는 이미 해당 비트 위치로 이동된 값 */
-static MPU6050_Status MPU6050_UpdateBits(
-    MPU6050_Device *dev,
-    uint8_t reg,
-    uint8_t mask,
-    uint8_t value);
-
-static MPU6050_Status MPU6050_WriteMemoryBlock(
-    MPU6050_Device *dev,
-    const uint8_t *data,
-    uint16_t size,
-    uint8_t bank,
-    uint8_t offset,
-    bool verify)
-{
-
-};
-
-static bool i2c_mpu6050_writeBit(uint8_t channel, uint16_t dev_addr, uint16_t mem_addr,
-    uint8_t bit_num, uint8_t tf, uint16_t len, uint32_t timeout)
-{
-    uint8_t tmp;
-    mcal_i2c_read(channel, dev_addr, mem_addr, 1, &tmp, 1, timeout);
-    tmp = (tf != 0) ? (tmp | (1 << bit_num)) : (tmp & ~(1 << bit_num));
-    mcal_i2c_write(channel, dev_addr, mem_addr, 1, (const uint8_t *)&tmp, 1, timeout);
-};
-
-MPU6050_Status MPU6050_reset(MPU6050_Device *dev)
-{
-    i2c_mpu6050_writeBit(dev->config->channel, dev->config->address, MPU6050_REG_PWR_MGMT_1, MPU6050_PWR1_DEVICE_RESET_BIT, 1, 1, 0);
-}
-MPU6050_Status MPU6050_DMPInitialize(MPU6050_Device *dev)
-{
-    /* Resetting MPU6050... */
-    reset();
-    // delay(30);
-
-    // disable sleep mode
-}
-
-MPU6050_Status MPU6050_SetDMPEnabled(MPU6050_Device *dev, bool enabled)
-{
-
-}
-#endif
 
 static const uint8_t dmpMemory[] = {
     /* bank # 0 */
@@ -293,7 +221,108 @@ static const uint8_t dmpMemory[] = {
 };
 
 
-#if MPU6050_C
+static MPU6050_Status write_bytes(const MPU6050_Device *device, uint8_t reg,
+                                  const uint8_t *data, uint16_t length)
+{
+    if (data == NULL || length == 0U)
+        return MPU6050_ERROR_ARGUMENT;
+    return bus_status(mcal_i2c_write(device->config.channel,
+        device->config.address, reg, 1U, data, length,
+        device->config.timeout_ms));
+}
+
+static MPU6050_Status update_bits(const MPU6050_Device *device,
+                                  uint8_t reg, uint8_t mask, uint8_t value)
+{
+    uint8_t current;
+    MPU6050_Status status = read_bytes(device, reg, &current, 1U);
+    if (status != MPU6050_OK)
+        return status;
+    current = (uint8_t)((current & (uint8_t)~mask) | (value & mask));
+    return write_byte(device, reg, current);
+}
+
+static MPU6050_Status dmp_set_memory_position(const MPU6050_Device *device,
+                                              uint8_t bank, uint8_t address)
+{
+    MPU6050_Status status = write_byte(device, MPU6050_REG_BANK_SEL,
+                                      (uint8_t)(bank & 0x1FU));
+    if (status != MPU6050_OK)
+        return status;
+    return write_byte(device, MPU6050_REG_MEM_START_ADDR, address);
+}
+
+static MPU6050_Status dmp_write_memory_block(const MPU6050_Device *device,
+                                             const uint8_t *data,
+                                             uint16_t size,
+                                             uint8_t bank,
+                                             uint8_t address,
+                                             bool verify)
+{
+    uint8_t verify_buffer[MPU6050_DMP_CHUNK_SIZE];
+    uint16_t index = 0U;
+    uint16_t current_address = address;
+    uint8_t current_bank = bank;
+
+    if (data == NULL || size == 0U)
+        return MPU6050_ERROR_ARGUMENT;
+
+    while (index < size) {
+        uint16_t chunk = (uint16_t)(size - index);
+        uint16_t bank_remaining =
+            (uint16_t)(MPU6050_DMP_BANK_SIZE - current_address);
+        MPU6050_Status status;
+
+        if (chunk > MPU6050_DMP_CHUNK_SIZE)
+            chunk = MPU6050_DMP_CHUNK_SIZE;
+        if (chunk > bank_remaining)
+            chunk = bank_remaining;
+
+        status = dmp_set_memory_position(device, current_bank,
+                                         (uint8_t)current_address);
+        if (status != MPU6050_OK)
+            return status;
+
+        status = write_bytes(device, MPU6050_REG_MEM_R_W, &data[index], chunk);
+        if (status != MPU6050_OK)
+            return status;
+
+        if (verify) {
+            status = dmp_set_memory_position(device, current_bank,
+                                             (uint8_t)current_address);
+            if (status != MPU6050_OK)
+                return status;
+            status = read_bytes(device, MPU6050_REG_MEM_R_W,
+                                verify_buffer, chunk);
+            if (status != MPU6050_OK)
+                return status;
+            if (memcmp(verify_buffer, &data[index], chunk) != 0)
+                return MPU6050_ERROR_VERIFY;
+        }
+
+        index = (uint16_t)(index + chunk);
+        current_address = (uint16_t)(current_address + chunk);
+        if (current_address >= MPU6050_DMP_BANK_SIZE) {
+            current_address = 0U;
+            ++current_bank;
+        }
+    }
+
+    return MPU6050_OK;
+}
+
+static MPU6050_Status dmp_reset_fifo(const MPU6050_Device *device)
+{
+    return update_bits(device, MPU6050_REG_USER_CTRL,
+                       MPU6050_MASK_FIFO_RESET, MPU6050_MASK_FIFO_RESET);
+}
+
+static MPU6050_Status clear_interrupt_status(const MPU6050_Device *device)
+{
+    uint8_t ignored;
+    return read_bytes(device, MPU6050_REG_INT_STATUS, &ignored, 1U);
+}
+
 void MPU6050_DefaultConfig(MPU6050_Config *config)
 {
     if (config == NULL)
@@ -331,19 +360,19 @@ MPU6050_Status MPU6050_Init(MPU6050_Device *device, const MPU6050_Config *config
     status = write_verify(device, MPU6050_REG_PWR_MGMT_1, 0x01U); /* PLL X, wake */
     if (status != MPU6050_OK)
         return status;
-    status = write_verify(device, REG_PWR_MGMT_2, 0x00U); /* Enable all axes */
+    status = write_verify(device, MPU6050_REG_PWR_MGMT_2, 0x00U); /* Enable all axes */
     if (status != MPU6050_OK)
         return status;
-    status = write_verify(device, REG_CONFIG, (uint8_t)config->dlpf);
+    status = write_verify(device, MPU6050_REG_CONFIG, (uint8_t)config->dlpf);
     if (status != MPU6050_OK)
         return status;
-    status = write_verify(device, REG_SMPLRT_DIV, config->sample_rate_div);
+    status = write_verify(device, MPU6050_REG_SMPLRT_DIV, config->sample_rate_div);
     if (status != MPU6050_OK)
         return status;
-    status = write_verify(device, REG_GYRO_CONFIG, (uint8_t)(config->gyro_range << 3U));
+    status = write_verify(device, MPU6050_REG_GYRO_CONFIG, (uint8_t)(config->gyro_range << 3U));
     if (status != MPU6050_OK)
         return status;
-    status = write_verify(device, REG_ACCEL_CONFIG, (uint8_t)(config->accel_range << 3U));
+    status = write_verify(device, MPU6050_REG_ACCEL_CONFIG, (uint8_t)(config->accel_range << 3U));
     if (status != MPU6050_OK)
         return status;
     device->config.delay_ms(100U); /* Allow gyro startup and filters to settle */
@@ -352,6 +381,9 @@ MPU6050_Status MPU6050_Init(MPU6050_Device *device, const MPU6050_Config *config
     device->gyro_lsb_per_dps = gyro_scales[config->gyro_range];
     for (unsigned int axis = 0U; axis < 3U; ++axis)
         device->gyro_bias_dps[axis] = 0.0f;
+    device->dmp_packet_size = MPU6050_DMP_PACKET_SIZE;
+    device->dmp_initialized = false;
+    device->dmp_enabled = false;
     device->initialized = true;
     return MPU6050_OK;
 }
@@ -370,7 +402,7 @@ MPU6050_Status MPU6050_DataReady(const MPU6050_Device *device, bool *ready)
         return MPU6050_ERROR_ARGUMENT;
     if (status != MPU6050_OK)
         return status;
-    status = read_bytes(device, REG_INT_STATUS, &flags, 1U);
+    status = read_bytes(device, MPU6050_REG_INT_STATUS, &flags, 1U);
     if (status == MPU6050_OK)
         *ready = (flags & 0x01U) != 0U;
     return status;
@@ -471,4 +503,252 @@ MPU6050_Status MPU6050_CalibrateGyro(MPU6050_Device *device, uint16_t samples)
             / device->gyro_lsb_per_dps;
     return MPU6050_OK;
 }
-#endif
+
+MPU6050_Status MPU6050_reset(MPU6050_Device *dev)
+{
+    MPU6050_Status status = check_device(dev);
+    if (status != MPU6050_OK)
+        return status;
+
+    status = write_byte(dev, MPU6050_REG_PWR_MGMT_1, 0x80U);
+    if (status == MPU6050_OK)
+        dev->config.delay_ms(100U);
+
+    dev->initialized = false;
+    dev->dmp_initialized = false;
+    dev->dmp_enabled = false;
+    return status;
+}
+
+MPU6050_Status MPU6050_DMPInitialize(MPU6050_Device *dev)
+{
+    static const uint8_t fifo_divisor[2] = {0x00U, MPU6050_DMP_FIFO_DIVISOR};
+    MPU6050_Status status = check_device(dev);
+
+    if (status != MPU6050_OK)
+        return status;
+    if (sizeof(dmpMemory) != MPU6050_DMP_CODE_SIZE)
+        return MPU6050_ERROR_VERIFY;
+
+    dev->dmp_initialized = false;
+    dev->dmp_enabled = false;
+    dev->dmp_packet_size = MPU6050_DMP_PACKET_SIZE;
+
+#define DMP_TRY(call) do { status = (call); if (status != MPU6050_OK) goto fail; } while (0)
+
+    DMP_TRY(write_byte(dev, MPU6050_REG_PWR_MGMT_1, 0x80U));
+    dev->config.delay_ms(30U);
+    DMP_TRY(write_byte(dev, MPU6050_REG_PWR_MGMT_1, 0x00U));
+
+    DMP_TRY(write_byte(dev, MPU6050_REG_I2C_SLV0_ADDR, 0x7FU));
+    DMP_TRY(update_bits(dev, MPU6050_REG_USER_CTRL,
+                        MPU6050_MASK_I2C_MST_EN, 0U));
+    DMP_TRY(write_byte(dev, MPU6050_REG_I2C_SLV0_ADDR,
+                       dev->config.address));
+    DMP_TRY(update_bits(dev, MPU6050_REG_USER_CTRL,
+                        MPU6050_MASK_I2C_MST_RESET,
+                        MPU6050_MASK_I2C_MST_RESET));
+    dev->config.delay_ms(20U);
+
+    DMP_TRY(write_verify(dev, MPU6050_REG_PWR_MGMT_1, 0x03U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_PWR_MGMT_2, 0x00U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_INT_ENABLE,
+                         (uint8_t)(MPU6050_MASK_INT_FIFO_OFLOW |
+                                   MPU6050_MASK_INT_DMP)));
+    DMP_TRY(write_verify(dev, MPU6050_REG_SMPLRT_DIV, 4U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_CONFIG, 0x0BU));
+    DMP_TRY(write_verify(dev, MPU6050_REG_GYRO_CONFIG, 0x18U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_ACCEL_CONFIG, 0x00U));
+
+    DMP_TRY(dmp_write_memory_block(dev, dmpMemory,
+                                   MPU6050_DMP_CODE_SIZE, 0U, 0U, true));
+    DMP_TRY(dmp_write_memory_block(dev, fifo_divisor,
+                                   sizeof(fifo_divisor), 2U, 0x16U, true));
+
+    DMP_TRY(write_verify(dev, MPU6050_REG_DMP_CFG_1, 0x03U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_DMP_CFG_2, 0x00U));
+
+    DMP_TRY(update_bits(dev, MPU6050_REG_XG_OFFS_TC, 0x01U, 0U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_MOT_THR, 2U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_ZRMOT_THR, 156U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_MOT_DUR, 80U));
+    DMP_TRY(write_verify(dev, MPU6050_REG_ZRMOT_DUR, 0U));
+
+    DMP_TRY(update_bits(dev, MPU6050_REG_USER_CTRL,
+                        MPU6050_MASK_FIFO_EN, MPU6050_MASK_FIFO_EN));
+    DMP_TRY(update_bits(dev, MPU6050_REG_USER_CTRL,
+                        MPU6050_MASK_DMP_RESET, MPU6050_MASK_DMP_RESET));
+    DMP_TRY(update_bits(dev, MPU6050_REG_USER_CTRL,
+                        MPU6050_MASK_DMP_EN, 0U));
+    DMP_TRY(dmp_reset_fifo(dev));
+    DMP_TRY(clear_interrupt_status(dev));
+
+    dev->config.accel_range = MPU6050_ACCEL_2G;
+    dev->config.gyro_range = MPU6050_GYRO_2000DPS;
+    dev->config.dlpf = MPU6050_DLPF_42HZ;
+    dev->config.sample_rate_div = 4U;
+    dev->accel_lsb_per_g = 16384.0f;
+    dev->gyro_lsb_per_dps = 16.4f;
+    dev->dmp_initialized = true;
+    dev->dmp_enabled = false;
+
+#undef DMP_TRY
+    return MPU6050_OK;
+
+fail:
+#undef DMP_TRY
+    dev->initialized = false;
+    dev->dmp_initialized = false;
+    dev->dmp_enabled = false;
+    return status;
+}
+
+MPU6050_Status MPU6050_SetDMPEnabled(MPU6050_Device *dev, bool enabled)
+{
+    uint8_t user_ctrl;
+    MPU6050_Status status = check_device(dev);
+
+    if (status != MPU6050_OK)
+        return status;
+    if (!dev->dmp_initialized)
+        return MPU6050_ERROR_DMP_NOT_READY;
+
+    if (enabled) {
+        status = dmp_reset_fifo(dev);
+        if (status != MPU6050_OK)
+            return status;
+        status = clear_interrupt_status(dev);
+        if (status != MPU6050_OK)
+            return status;
+        status = update_bits(dev, MPU6050_REG_USER_CTRL,
+            (uint8_t)(MPU6050_MASK_DMP_EN | MPU6050_MASK_FIFO_EN),
+            (uint8_t)(MPU6050_MASK_DMP_EN | MPU6050_MASK_FIFO_EN));
+    } else {
+        status = update_bits(dev, MPU6050_REG_USER_CTRL,
+                             MPU6050_MASK_DMP_EN, 0U);
+    }
+    if (status != MPU6050_OK)
+        return status;
+
+    status = read_bytes(dev, MPU6050_REG_USER_CTRL, &user_ctrl, 1U);
+    if (status != MPU6050_OK)
+        return status;
+    if (((user_ctrl & MPU6050_MASK_DMP_EN) != 0U) != enabled)
+        return MPU6050_ERROR_VERIFY;
+
+    dev->dmp_enabled = enabled;
+    return MPU6050_OK;
+}
+
+MPU6050_Status MPU6050_GetFIFOCount(const MPU6050_Device *dev,
+                                    uint16_t *count)
+{
+    uint8_t bytes[2];
+    MPU6050_Status status = check_device(dev);
+
+    if (count == NULL)
+        return MPU6050_ERROR_ARGUMENT;
+    if (status != MPU6050_OK)
+        return status;
+
+    status = read_bytes(dev, MPU6050_REG_FIFO_COUNTH, bytes, sizeof(bytes));
+    if (status != MPU6050_OK)
+        return status;
+
+    *count = (uint16_t)(((uint16_t)bytes[0] << 8U) | bytes[1]);
+    return MPU6050_OK;
+}
+
+MPU6050_Status MPU6050_ReadFIFO(const MPU6050_Device *dev,
+                                uint8_t *data, uint16_t length)
+{
+    MPU6050_Status status = check_device(dev);
+
+    if (data == NULL || length == 0U || length > MPU6050_FIFO_CAPACITY)
+        return MPU6050_ERROR_ARGUMENT;
+    if (status != MPU6050_OK)
+        return status;
+
+    return read_bytes(dev, MPU6050_REG_FIFO_R_W, data, length);
+}
+
+MPU6050_Status MPU6050_DMPPacketAvailable(const MPU6050_Device *dev,
+                                          bool *available)
+{
+    uint16_t count;
+    MPU6050_Status status = check_device(dev);
+
+    if (available == NULL)
+        return MPU6050_ERROR_ARGUMENT;
+    *available = false;
+    if (status != MPU6050_OK)
+        return status;
+    if (!dev->dmp_initialized || !dev->dmp_enabled)
+        return MPU6050_ERROR_DMP_NOT_READY;
+
+    status = MPU6050_GetFIFOCount(dev, &count);
+    if (status != MPU6050_OK)
+        return status;
+    if (count >= MPU6050_FIFO_CAPACITY)
+        return MPU6050_ERROR_FIFO_OVERFLOW;
+
+    *available = count >= dev->dmp_packet_size;
+    return MPU6050_OK;
+}
+
+MPU6050_Status MPU6050_ReadDMPPacket(const MPU6050_Device *dev,
+                                     uint8_t *packet,
+                                     uint16_t packet_capacity,
+                                     bool *ready)
+{
+    uint8_t int_status;
+    uint16_t fifo_count;
+    MPU6050_Status status = check_device(dev);
+
+    if (packet == NULL || ready == NULL)
+        return MPU6050_ERROR_ARGUMENT;
+    *ready = false;
+    if (status != MPU6050_OK)
+        return status;
+    if (!dev->dmp_initialized || !dev->dmp_enabled)
+        return MPU6050_ERROR_DMP_NOT_READY;
+    if (packet_capacity < dev->dmp_packet_size)
+        return MPU6050_ERROR_ARGUMENT;
+
+    status = read_bytes(dev, MPU6050_REG_INT_STATUS, &int_status, 1U);
+    if (status != MPU6050_OK)
+        return status;
+    status = MPU6050_GetFIFOCount(dev, &fifo_count);
+    if (status != MPU6050_OK)
+        return status;
+
+    if ((int_status & MPU6050_MASK_INT_FIFO_OFLOW) != 0U ||
+        fifo_count >= MPU6050_FIFO_CAPACITY) {
+        status = dmp_reset_fifo(dev);
+        return status == MPU6050_OK ? MPU6050_ERROR_FIFO_OVERFLOW : status;
+    }
+
+    if (fifo_count < dev->dmp_packet_size)
+        return MPU6050_OK;
+
+    status = MPU6050_ReadFIFO(dev, packet, dev->dmp_packet_size);
+    if (status != MPU6050_OK)
+        return status;
+
+    *ready = true;
+    return MPU6050_OK;
+}
+
+MPU6050_Status MPU6050_DMPGetQuaternion(const uint8_t *packet,
+                                        MPU6050_Quaternion *quaternion)
+{
+    if (packet == NULL || quaternion == NULL)
+        return MPU6050_ERROR_ARGUMENT;
+
+    quaternion->w = (float)signed_be16(&packet[0]) / 16384.0f;
+    quaternion->x = (float)signed_be16(&packet[4]) / 16384.0f;
+    quaternion->y = (float)signed_be16(&packet[8]) / 16384.0f;
+    quaternion->z = (float)signed_be16(&packet[12]) / 16384.0f;
+    return MPU6050_OK;
+}
+
