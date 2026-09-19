@@ -80,7 +80,7 @@ CSRC = \
     MCAL/Target/STM32F4xx/stm32_queue.c \
     MCAL/Target/STM32F4xx/stm32_timer.c \
     MCAL/Target/STM32F4xx/mcal_i2c.c \
-    Devie/Sensor/MPU6050.c \
+    Device/Sensor/MPU6050.c \
     Test/uart_test.c \
     Core/System/systick.c
 
