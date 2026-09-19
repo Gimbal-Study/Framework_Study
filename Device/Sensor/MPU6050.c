@@ -23,21 +23,16 @@ static MPU6050_Status bus_status(mcal_i2c_status_t status)
     }
 };
 
-static MPU6050_Status read_bytes(const MPU6050_Device *device, uint8_t reg,
-                                 uint8_t *data, uint16_t length)
+static MPU6050_Status read_byte(const MPU6050_Device *dev, uint8_t reg_addr, uint8_t *data)
 {
-    /* mcal_i2c.h: read has an implicit 8-bit register address.
-     * MCAL performs START, register address, repeated START and NACK/STOP. */
-    return bus_status(mcal_i2c_read(device->config.channel,
-        device->config.address, reg, data, length, device->config.timeout_ms));
+    return bus_status(mcal_i2c_read(dev->config.channel, dev->config.address, reg_addr, 1U,/* 레지스터 주소 길이 */
+        data, 1U, 0/*dev->config.timeout_ms*/));    
 };
 
-static MPU6050_Status write_byte(const MPU6050_Device *device,
-                                 uint8_t reg, uint8_t value)
+static MPU6050_Status write_byte(const MPU6050_Device *dev,
+                                 uint8_t reg_addr, uint8_t value)
 {
-    /* Unlike read(), write() explicitly takes mem_addr_size=1 byte. */
-    return bus_status(mcal_i2c_write(device->config.channel,
-        device->config.address, reg, 1U, &value, 1U, device->config.timeout_ms));
+    return mcal_i2c_write(dev->config.channel, dev->config.address, reg_addr, 1, (const uint8_t*)&value, 1U, 0);
 };
 
 static MPU6050_Status check_device(const MPU6050_Device *device)
@@ -47,6 +42,15 @@ static MPU6050_Status check_device(const MPU6050_Device *device)
     return device->initialized ? MPU6050_OK : MPU6050_ERROR_NOT_INITIALIZED;
 };
 
+static bool valid_dmp_config(const MPU6050_Config *config)
+{
+    return config != NULL && config->channel >= 1U && config->channel <= 3U &&
+        (config->address == MPU6050_ADDRESS_AD0_LOW || config->address == MPU6050_ADDRESS_AD0_HIGH) &&
+        config->timeout_ms != 0U &&
+        config->delay_ms != NULL
+        ;
+};
+/*
 static bool valid_config(const MPU6050_Config *config)
 {
     return config != NULL && config->channel >= 1U && config->channel <= 3U &&
@@ -57,11 +61,13 @@ static bool valid_config(const MPU6050_Config *config)
         (unsigned int)config->gyro_range <= (unsigned int)MPU6050_GYRO_2000DPS &&
         config->dlpf >= MPU6050_DLPF_188HZ && config->dlpf <= MPU6050_DLPF_5HZ;
 };
+*/
 
-static MPU6050_Status probe(const MPU6050_Device *device)
+//who_am_i가 0x68인지 확인하는 함수
+static MPU6050_Status probe(const MPU6050_Device *dev)
 {
     uint8_t id;
-    MPU6050_Status status = read_bytes(device, MPU6050_REG_WHO_AM_I, &id, 1U);
+    MPU6050_Status status = read_byte(dev, MPU6050_REG_WHO_AM_I, &id);
     if (status != MPU6050_OK)
         return status;
     /* Full register is 0x68 for BOTH AD0 levels. Upstream getDeviceID()
@@ -69,14 +75,14 @@ static MPU6050_Status probe(const MPU6050_Device *device)
     return id == 0x68U ? MPU6050_OK : MPU6050_ERROR_ID;
 };
 
-static MPU6050_Status write_verify(const MPU6050_Device *device,
+static MPU6050_Status write_verify(const MPU6050_Device *dev,
                                    uint8_t reg, uint8_t value)
 {
     uint8_t actual;
-    MPU6050_Status status = write_byte(device, reg, value);
+    MPU6050_Status status = write_byte(dev, reg, value);
     if (status != MPU6050_OK)
         return status;
-    status = read_bytes(device, reg, &actual, 1U);
+    status = read_byte(dev, reg, &actual);
     if (status != MPU6050_OK)
         return status;
     return actual == value ? MPU6050_OK : MPU6050_ERROR_VERIFY;
@@ -91,17 +97,408 @@ static int16_t signed_be16(const uint8_t *bytes)
     return (int16_t)signed_value;
 };
 
+/* 레지스터의 mask에 해당하는 비트만 변경.
+ * value는 이미 해당 비트 위치로 이동된 값이다.
+ */
+// writeBit와 writeBits를 합친 함수라고 생각하면 된다.
+static MPU6050_Status MPU6050_UpdateBits(MPU6050_Device *dev, uint8_t reg, uint8_t mask, uint8_t value)
+{
+    uint8_t current;
+    MPU6050_Status status;
+
+    status = read_byte(dev, reg, &current);
+    if (status != MPU6050_OK)
+        return status;
+
+    current = (uint8_t)((current & (uint8_t)~mask) | (value & mask));
+
+    return write_byte(dev, reg, current);
+}
+
+/* 일반 DMP 메모리 bank 접근:
+ * userBank/prefetch 옵션은 켜지 않는다.
+ */
+static MPU6050_Status MPU6050_SelectMemory(MPU6050_Device *dev, uint8_t bank, uint8_t offset)
+{
+    MPU6050_Status status;
+
+    status = write_byte(dev, MPU6050_REG_BANK_SEL, bank);
+    if (status != MPU6050_OK)
+        return status;
+
+    return write_byte(dev, MPU6050_REG_MEM_START_ADDR, offset);
+}
+
+/* DMP RAM에 쓰고, 요청하면 같은 위치를 다시 읽어 검증한다.
+ * 이 구현은 일반 DMP 메모리 bank 0~7만 허용한다.
+ */
+static MPU6050_Status MPU6050_WriteMemoryBlock(
+    MPU6050_Device *dev,
+    const uint8_t *data,
+    uint16_t size,
+    uint8_t bank,
+    uint8_t offset,
+    bool verify)
+{
+    uint8_t verify_buffer[MPU6050_DMP_CHUNK_SIZE];
+    uint16_t done = 0U;
+    uint16_t position;
+    MPU6050_Status status;
+
+    if (dev == NULL || data == NULL || size == 0U)
+        return MPU6050_ERROR_ARGUMENT;
+
+    position = (uint16_t)((uint16_t)bank * MPU6050_DMP_BANK_SIZE + offset);
+
+    // position이 1929를 넘거나 bank가 7을 넘으면 ERROR
+    if (bank >= 8U || (uint32_t)position + size > 8UL * MPU6050_DMP_BANK_SIZE)
+        return MPU6050_ERROR_ARGUMENT;
+
+    while (done < size) {
+        uint8_t current_bank;
+        uint8_t current_offset;
+        uint16_t chunk;
+        uint16_t bank_remaining;
+
+        // 현재 bank
+        current_bank = (uint8_t)(position / MPU6050_DMP_BANK_SIZE);
+        
+        // 현재 offset
+        current_offset = (uint8_t)(position % MPU6050_DMP_BANK_SIZE);
+        
+        // 현재 bank가 찰 때까지 남은 공간
+        bank_remaining = MPU6050_DMP_BANK_SIZE - current_offset;
+
+        chunk = (uint16_t)(size - done);
+
+        if (chunk > MPU6050_DMP_CHUNK_SIZE)
+            chunk = MPU6050_DMP_CHUNK_SIZE;
+
+        if (chunk > bank_remaining)
+            chunk = bank_remaining;
+
+        status = MPU6050_SelectMemory(dev, current_bank, current_offset);
+        
+        if (status != MPU6050_OK)
+            return status;
+
+        status = bus_status(mcal_i2c_write(dev->config.channel, dev->config.address, MPU6050_REG_MEM_R_W, 1U,
+            &data[done], chunk, 0));
+        if (status != MPU6050_OK)
+            return status;
+
+        if (verify) {
+            /* 쓰기로 진행된 메모리 접근 위치를 되돌린다. */
+            status = MPU6050_SelectMemory(dev, current_bank, current_offset);
+            if (status != MPU6050_OK)
+                return status;
+
+            status = mcal_i2c_read(dev->config.channel, dev->config.address, MPU6050_REG_MEM_R_W, 1U, verify_buffer, chunk, 0);
+            if (status != MPU6050_OK)
+                return status;
+
+            // memcmp의 기능은?
+            if (memcmp(&data[done], verify_buffer, chunk) != 0)
+                return MPU6050_ERROR_VERIFY;
+        }
+
+        done = (uint16_t)(done + chunk);
+        position = (uint16_t)(position + chunk);
+    }
+
+    return MPU6050_OK;
+}
+
+/* 자동으로 해제되는 리셋 비트가 0이 될 때까지 확인.
+ * 최대 100번 확인하며, 각 I2C 호출에는 별도 MCAL timeout이 적용된다.
+ */
+static MPU6050_Status MPU6050_WaitClear(MPU6050_Device *dev, uint8_t reg, uint8_t mask)
+{
+    MPU6050_Status status;
+    uint8_t value;
+
+    for (uint16_t attempt = 0U; attempt < 100U; ++attempt) {
+        status = read_byte(dev, reg, &value);
+        if (status != MPU6050_OK)
+            return status;
+
+        if ((value & mask) == 0U)
+            return MPU6050_OK;
+
+        dev->config.delay_ms(1U);
+    }
+
+    return MPU6050_ERROR_TIMEOUT;
+}
+
+
+static void MPU6050_InvalidateState(MPU6050_Device *dev)
+{
+    dev->initialized = false;
+    dev->dmp_initialized = false;
+    dev->dmp_enabled = false;
+    dev->dmp_packet_size = 0U;
+}
+
+/* MPU 전체 리셋.
+ * 성공하더라도 아직 센서/DMP 초기화가 끝난 상태는 아니다.
+ */
+MPU6050_Status MPU6050_reset(MPU6050_Device *dev)
+{
+    MPU6050_Status status;
+
+    if (dev == NULL)
+        return MPU6050_ERROR_ARGUMENT;
+
+    MPU6050_InvalidateState(dev);
+
+    if (!valid_dmp_config(&dev->config))
+        return MPU6050_ERROR_ARGUMENT;
+
+    status = write_byte(dev, MPU6050_REG_PWR_MGMT_1, 0x80U);
+    if (status != MPU6050_OK)
+        return status;
+
+    /* 원본은 30ms. 여기서는 초기화 여유를 두어 100ms 사용. */
+    dev->config.delay_ms(100U);
+
+    return MPU6050_WaitClear(dev, MPU6050_REG_PWR_MGMT_1, 0x80U);
+}
+
+MPU6050_Status MPU6050_DMPInitialize(MPU6050_Device *dev)
+{
+    MPU6050_Status status;
+    uint8_t int_status;
+
+    const uint8_t dmp_update[2] = {0x00U, MPU6050_DMP_FIFO_DIVISOR};
+
+    if (dev == NULL)
+        return MPU6050_ERROR_ARGUMENT;
+
+    MPU6050_InvalidateState(dev);
+
+    if (!valid_dmp_config(&dev->config))
+        return MPU6050_ERROR_ARGUMENT;
+
+    /*
+     * 반복되는 오류 검사 단순화.
+     * 이 함수 안에서만 사용하고 아래에서 해제한다.
+     */
+
+#define DMP_TRY(expression)                     \
+    do {                                        \
+        status = (expression);                  \
+        if (status != MPU6050_OK)               \
+            goto fail;                          \
+    } while (0)
+
+    /* 1. 전원 인가 이후 여유 시간과 연결 확인 */
+    dev->config.delay_ms(100U);
+    DMP_TRY(probe(dev));
+
+    /* 2. 장치 전체 리셋 및 절전 해제 */
+    DMP_TRY(MPU6050_reset(dev));
+    
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_PWR_MGMT_1, MPU6050_MASK_SLEEP, 0x00U));
+
+    /*
+     * 3. 레퍼런스의 하드웨어 revision 접근 준비.
+     * BANK_SEL = bank 0x10 | userBank | prefetch = 0x70.
+     *
+     * DEBUG_PRINTLN(readMemoryByte())와
+     * DEBUG_PRINTLN(getOTPBankValid())는
+     * 원본 DEBUG 비활성 상태처럼 생략한다.
+     */
+    DMP_TRY(write_byte(dev, MPU6050_REG_BANK_SEL, 0x70U));
+
+    DMP_TRY(write_byte(dev, MPU6050_REG_MEM_START_ADDR, 0x06U));
+
+    DMP_TRY(write_byte(dev, MPU6050_REG_BANK_SEL, 0x00U));
+
+    /* 4. 보조 I2C Master 설정: 레퍼런스 순서 유지 */
+    DMP_TRY(write_byte(dev, MPU6050_REG_I2C_SLV0_ADDR, 0x7FU));
+
+    DMP_TRY(MPU6050_UpdateBits(
+        dev,
+        MPU6050_REG_USER_CTRL,
+        MPU6050_MASK_I2C_MST_EN,
+        0x00U
+    ));
+
+    /*
+     * 원본의 0x68을 그대로 유지.
+     * STM32가 사용하는 dev->config.address를 바꾸는 코드가 아니다.
+     */
+    DMP_TRY(write_byte(dev, MPU6050_REG_I2C_SLV0_ADDR, 0x68U));
+
+    DMP_TRY(MPU6050_UpdateBits(
+        dev,
+        MPU6050_REG_USER_CTRL,
+        MPU6050_MASK_I2C_MST_RESET,
+        MPU6050_MASK_I2C_MST_RESET
+    ));
+
+    dev->config.delay_ms(20U);
+
+    DMP_TRY(MPU6050_WaitClear(
+        dev,
+        MPU6050_REG_USER_CTRL,
+        MPU6050_MASK_I2C_MST_RESET
+    ));
+
+    /* 5. Z gyro PLL 선택 */
+    DMP_TRY(MPU6050_UpdateBits(
+        dev, MPU6050_REG_PWR_MGMT_1,
+        MPU6050_MASK_CLKSEL, 0x03U
+    ));
+
+    /* 6. DMP와 FIFO Overflow 인터럽트 허용 */
+    DMP_TRY(write_byte(dev, MPU6050_REG_INT_ENABLE,
+        (uint8_t)(MPU6050_MASK_INT_DMP | MPU6050_MASK_INT_FIFO_OFLOW)
+    ));
+
+    /* 7. 센서 샘플링 속도: DLPF 적용 시 1kHz / 5 = 200Hz */
+    DMP_TRY(write_byte(dev, MPU6050_REG_SMPLRT_DIV, 4U));
+
+    /* FSYNC -> TEMP_OUT_L[0] */
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_CONFIG, 0x38U, 0x08U));
+
+    /* DLPF mode 3: gyro 42Hz */
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_CONFIG, 0x07U, 0x03U));
+
+    /* 자이로 ±2000 degrees/s */
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_GYRO_CONFIG, 0x18U, 0x18U));
+
+    /*
+     * 원본은 리셋 기본값에 의존한다.
+     * 이 구현은 가속도 ±2g와 전체 축 활성화를 명시한다.
+     */
+    DMP_TRY(write_byte(dev, MPU6050_REG_ACCEL_CONFIG, 0x00U));
+
+    DMP_TRY(write_byte(dev, REG_PWR_MGMT_2, 0x00U));
+
+    /* 8. DMP 펌웨어 업로드 + 읽기 검증 */
+    DMP_TRY(MPU6050_WriteMemoryBlock(dev, dmpMemory, (uint16_t)sizeof(dmpMemory), 0U, 0U, true));
+
+    /* 9. DMP FIFO 출력 주기 패치 + 검증 */
+    DMP_TRY(MPU6050_WriteMemoryBlock(dev, dmp_update, (uint16_t)sizeof(dmp_update), 0x02U, 0x16U, true));
+
+    /* 10. DMP 실행 시작 위치 0x0300 */
+    DMP_TRY(write_byte(dev, MPU6050_REG_DMP_CFG_1, 0x03U));
+
+    DMP_TRY(write_byte(dev, MPU6050_REG_DMP_CFG_2, 0x00U));
+
+    /* 11. OTP valid 비트만 해제 */
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_XG_OFFS_TC, 0x01U, 0x00U));
+
+    /* 12. 움직임/정지 감지 설정: 원본 값 유지 */
+    DMP_TRY(write_byte(dev, MPU6050_REG_MOT_THR, 2U));
+
+    DMP_TRY(write_byte(dev, MPU6050_REG_ZRMOT_THR, 156U));
+
+    DMP_TRY(write_byte(dev, MPU6050_REG_MOT_DUR, 80U));
+
+    DMP_TRY(write_byte(dev, MPU6050_REG_ZRMOT_DUR, 0U));
+
+    /* 13. FIFO 활성화 후 DMP 상태 리셋 */
+    DMP_TRY(MPU6050_UpdateBits(
+        dev, MPU6050_REG_USER_CTRL,
+        MPU6050_MASK_FIFO_EN, MPU6050_MASK_FIFO_EN));
+
+    DMP_TRY(MPU6050_UpdateBits(
+        dev, MPU6050_REG_USER_CTRL,
+        MPU6050_MASK_DMP_RESET, MPU6050_MASK_DMP_RESET));
+
+    DMP_TRY(MPU6050_WaitClear(
+        dev, MPU6050_REG_USER_CTRL,
+        MPU6050_MASK_DMP_RESET));
+
+    /* 초기화 종료 시 DMP는 실행하지 않음 */
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_USER_CTRL, MPU6050_MASK_DMP_EN, 0x00U));
+
+    /*
+     * 14. FIFO 정리.
+     * 원본에 FIFO 비활성/재활성 단계를 추가하여
+     * FIFO_RESET의 비활성 조건을 명시적으로 만족시킨다.
+     */
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_USER_CTRL, MPU6050_MASK_FIFO_EN, 0x00U));
+
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_USER_CTRL, MPU6050_MASK_FIFO_RESET, MPU6050_MASK_FIFO_RESET));
+
+    DMP_TRY(MPU6050_WaitClear(dev, MPU6050_REG_USER_CTRL, MPU6050_MASK_FIFO_RESET));
+
+    DMP_TRY(MPU6050_UpdateBits(dev, MPU6050_REG_USER_CTRL, MPU6050_MASK_FIFO_EN, MPU6050_MASK_FIFO_EN));
+
+    DMP_TRY(read_byte(dev, MPU6050_REG_INT_STATUS, &int_status));
+
+    /* 15. 성공했을 때만 실제 설정을 소프트웨어 상태에 반영 */
+    dev->config.accel_range = MPU6050_ACCEL_2G;
+    dev->config.gyro_range = MPU6050_GYRO_2000DPS;
+    dev->config.dlpf = MPU6050_DLPF_42HZ;
+    dev->config.sample_rate_div = 4U;
+
+    /* 아래 환산 계수는 일반 센서 출력 레지스터용이다. */
+    dev->accel_lsb_per_g = 16384.0f;
+    dev->gyro_lsb_per_dps = 16.4f;
+
+    for (uint8_t axis = 0U; axis < 3U; ++axis)
+        dev->gyro_bias_dps[axis] = 0.0f;
+
+    dev->dmp_packet_size = MPU6050_DMP_PACKET_SIZE;
+    dev->initialized = true;
+    dev->dmp_initialized = true;
+    dev->dmp_enabled = false;
+
+#undef DMP_TRY
+    return MPU6050_OK;
+
+fail:
+    /*
+     * 부분 초기화 상태를 사용하지 못하도록 표시.
+     * 통신 장애 시 아래 정리 쓰기는 실패할 수 있으므로,
+     * 하드웨어 정지가 보장된다고 해석하면 안 된다.
+     * 최초 오류 status는 유지한다.
+     */
+    (void)write_byte(dev, MPU6050_REG_INT_ENABLE, 0x00U);
+    (void)write_byte(dev, MPU6050_REG_USER_CTRL, 0x00U);
+
+    MPU6050_InvalidateState(dev);
+    return status;
+}
+
+MPU6050_Status MPU6050_SetDMPEnabled(MPU6050_Device *dev, bool enabled)
+{
+    MPU6050_Status status;
+
+    if (dev == NULL)
+        return MPU6050_ERROR_ARGUMENT;
+
+    if (!dev->initialized || !dev->dmp_initialized)
+        return MPU6050_ERROR_NOT_INITIALIZED;
+
+    status = MPU6050_UpdateBits(dev, MPU6050_REG_USER_CTRL, MPU6050_MASK_DMP_EN,
+        enabled ? MPU6050_MASK_DMP_EN : 0x00U
+    );
+
+    if (status != MPU6050_OK) {
+        /*
+         * 전송 실패 시 실제 하드웨어 상태를 확정할 수 없다.
+         * 재초기화를 요구하도록 상태를 무효화한다.
+         */
+        MPU6050_InvalidateState(dev);
+        return status;
+    }
+
+    dev->dmp_enabled = enabled;
+    return MPU6050_OK;
+}
+
 #if 0
 static void MPU6050_setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
     if (prefetchEnabled) bank |= 0x40;
     mcal_i2c_write(1, mpu6050.devAddr, MPU6050_REG_BANK_SEL, 1, &bank, 1);
-};
-
-static bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify)
-{
-    return writeMemoryBlock(data, dataSize, bank, address, verify, true);
 };
 
 static MPU6050_Status MPU6050_ReadReg(
@@ -112,13 +509,6 @@ static MPU6050_Status MPU6050_ReadReg(
 static MPU6050_Status MPU6050_WriteReg(
     MPU6050_Device *dev,
     uint8_t reg,
-    uint8_t value);
-
-/* value는 이미 해당 비트 위치로 이동된 값 */
-static MPU6050_Status MPU6050_UpdateBits(
-    MPU6050_Device *dev,
-    uint8_t reg,
-    uint8_t mask,
     uint8_t value);
 
 static MPU6050_Status MPU6050_WriteMemoryBlock(

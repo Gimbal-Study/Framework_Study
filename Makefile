@@ -80,7 +80,8 @@ CSRC = \
     MCAL/Target/STM32F4xx/stm32_queue.c \
     MCAL/Target/STM32F4xx/stm32_timer.c \
     Test/uart_test.c \
-    Core/System/systick.c
+    Core/System/systick.c \
+    Device/Sensor/MPU6050.c
 
 ASRC = \
     Board/NUCLEO_F411RE/crt0.s
@@ -117,6 +118,7 @@ INCLUDE = \
     -I Test \
     -I CMSIS/Device/STM32F4xx \
     -I CMSIS/Device/STM32F4xx \
+    -I Device/Sensor/MPU6050 \
     -I Core/System \
     -I "$(C_DIR)/include" \
     -I "$(GCC_DIR)/include"
