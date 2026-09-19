@@ -114,7 +114,7 @@ INCLUDE = \
     -I. \
     -I Board/NUCLEO_F411RE \
     -I MCAL \
-    -I Devie/Sensor \
+    -I Device/Sensor \
     -I Core/System \
     -I CMSIS/Core \
     -I Test \
