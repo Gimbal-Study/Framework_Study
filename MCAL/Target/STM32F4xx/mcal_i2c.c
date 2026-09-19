@@ -3,40 +3,136 @@
 #include <common.h>
 #include <macro.h>
 
+#define I2C_TIMER_INSTANCE 2
+
+/* 인터럽트와 메인 코드가 공유하므로 volatile 선언 필수 */
+static volatile uint32_t g_i2c_timer_ms = 0;
+
+// TIM2 인터럽트 핸들러 (1ms마다 호출)
+void TIM2_IRQHandler(void)
+{
+    // 알람 깃발(UIF)이 떴는지 확인
+    if (TIM2->SR & TIM_SR_UIF)
+    {
+        TIM2->SR &= ~TIM_SR_UIF;         // 알람 깃발 수동 클리어 (필수)
+        NVIC_ClearPendingIRQ(TIM2_IRQn); // NVIC 펜딩 클리어
+        g_i2c_timer_ms++;                // 1ms 경과 카운트 증가
+    }
+}
+
 bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32_t Freq)
 {
-    if(/* channel == ??? ||*/ Freq == 0)
+    // 매개변수 값 유효성 검사
+    if (channel < 1 || channel > 2 || Freq == 0)
     {
         return false;
     }
 
-    // 2. 하드웨어 주변장치 클록 인가 (I2C1, GPIOB)
-    RCC->APB1ENR |= RCC_APB1ENR_I2C1EN; //  (0x1UL << 21U)
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // (0x1UL << 1U)
+    // I2C 하드웨어 레지스터 주소를 가리키는 포인터
+    I2C_TypeDef *i2c_instance;
 
-    // 3. GPIO 핀 설정 (PB6 = SCL, PB7 = SDA)
-    // MODER: PB6, PB7을 대체 기능 모드(Alternate Function, 10b)로 설정
-    GPIOB->MODER &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
-    GPIOB->MODER |= ((0x2U << (6 * 2)) | (0x3U << (7 * 2)));
+    switch (channel)
+    {
+    case 1:
+        // 실제 I2C1 하드웨어 주소 지정
+        i2c_instance = I2C1;
 
-    // OTYPER: I2C 필수 조건인 Open-Drain(1) 설정
-    GPIOB->OTYPER |= (0x1U << 6) | (0x1U << 7);
+        // 2. 하드웨어 주변장치 클록 인가 (I2C1, GPIOB)
+        RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;  //  (0x1UL << 21U)
+        RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // (0x1UL << 1U)
 
-    // PUPDR: MCU 내부 풀업
-    GPIOB->PUPDR &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
-    GPIOB->PUPDR |= ((0x1U << (6 * 2)) | (0x1U << (7 * 2)));
+        // 3. GPIO 핀 설정 (PB6 = SCL, PB7 = SDA)
+        // MODER: PB6, PB7을 대체 기능 모드(Alternate Function, 10b)로 설정
+        GPIOB->MODER &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
+        GPIOB->MODER |= ((0x2U << (6 * 2)) | (0x2U << (7 * 2)));
 
-    // AFR[0]: PB6, PB7에 AF4(I2C1 기능 번호) 부여
-    GPIOB->AFR[0] &= ~((0xFU << (6 * 4)) | (0xFU << (7 * 4)));
-    GPIOB->AFR[0] |= ((0x4U << (6 * 4)) | (0x4U << (7 * 4)));
+        // OTYPER: I2C 필수 조건인 Open-Drain(1) 설정
+        GPIOB->OTYPER |= (0x1U << 6) | (0x1U << 7);
+
+        // PUPDR: MCU 내부 풀업
+        GPIOB->PUPDR &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
+        GPIOB->PUPDR |= ((0x1U << (6 * 2)) | (0x1U << (7 * 2)));
+
+        // AFR[0]: PB6, PB7에 AF4(I2C1 기능 번호) 부여
+        GPIOB->AFR[0] &= ~((0xFU << (6 * 4)) | (0xFU << (7 * 4)));
+        GPIOB->AFR[0] |= ((0x4U << (6 * 4)) | (0x4U << (7 * 4)));
+
+        break;
+
+    case 2:
+        // 실제 I2C2 하드웨어 주소 지정 (PB10 = SCL, PB11 = SDA)
+        i2c_instance = I2C2;
+
+        RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
+        RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+
+        // PB10, PB11 Alternate Function(0x2)
+        GPIOB->MODER &= ~((0x3U << (10 * 2)) | (0x3U << (11 * 2)));
+        GPIOB->MODER |= ((0x2U << (10 * 2)) | (0x2U << (11 * 2)));
+
+        // Open-Drain 설정
+        GPIOB->OTYPER |= (0x1U << 10) | (0x1U << 11);
+
+        // 내부 풀업 설정
+        GPIOB->PUPDR &= ~((0x3U << (10 * 2)) | (0x3U << (11 * 2)));
+        GPIOB->PUPDR |= ((0x1U << (10 * 2)) | (0x1U << (11 * 2)));
+
+        // AFR[1]: PB10, PB11에 AF4(I2C2) 부여 (핀 번호가 8 이상이므로 AFR[1] 사용)
+        GPIOB->AFR[1] &= ~((0xFU << ((10 - 8) * 4)) | (0xFU << ((11 - 8) * 4)));
+        GPIOB->AFR[1] |= ((0x4U << ((10 - 8) * 4)) | (0x4U << ((11 - 8) * 4)));
+
+        break;
+    }
 
     // I2C 하드웨어 타이밍 설정
     // 레지스터 설정 전 반드시 I2C 모듈을 잠시 꺼두어야 함
-    I2C1->CR1 &= ~I2C_CR1_PE; // (0x1UL << 0U)
+    i2c_instance->CR1 &= ~I2C_CR1_PE; // (0x1UL << 0U)
 
-    // I2C에 APB1 클록 주파수(MHz)를 알려줌
+    // I2C에 APB1 클록 주파수(MHz)를 알려줌. 설정하는 것이 아님.
     // 해당 프로젝트에서는 STM32에 공급되는 주파수가 96MHz. 이것의 절반.
-    I2C1->CR2 = 48; //
+    i2c_instance->CR2 = 48; //
+
+    // 표준 모드 (SCL -> 100KHz)
+    if (mode == 0)
+    {
+        // CCR은 12비트 이므로 12비트 중 가장 작은 값인 16비트로 변수 선언
+        uint16_t ccr_val = (uint16_t)(48000000 / (2U * Freq));
+
+        // 레퍼런스 매뉴얼에 최소값 4 명시되어 있음 (p.499)
+        if (ccr_val < 4)
+            ccr_val = 4;
+
+        i2c_instance->CCR = ccr_val;
+
+        // I2C 표준 규격 최대 상승 시간 : 표준 모드에서 전압이 0V -> 3V로 올라갈 때 허용되는 최대 시간은 1us
+        // 1us X 48MHz = 48 -> MCU는 시간을 모른다. 카운터만 알고 있으므로 48번 카운트.
+        i2c_instance->TRISE = 48 + 1;
+    }
+
+    // 고속 모드 (SCL -> 400KHz)
+    else
+    {
+        uint16_t ccr_val = (uint16_t)(48000000 / (3U * Freq));
+
+        // 고속 모드에서는 최솟값 1
+        if (ccr_val < 1)
+            ccr_val = 1;
+
+        i2c_instance->CCR = (1U << 15) | ccr_val;
+        i2c_instance->TRISE = ((48 * 300U) / 1000U) + 1; /* 300ns 기준 */
+    }
+
+    // 설정 완료 후 I2C 모듈 활성화 (PE = 1)
+    i2c_instance->CR1 |= I2C_CR1_PE;
+
+    g_i2c_timer_ms = 0U;
+    if (!mcal_timer_repeat_init(I2C_TIMER_INSTANCE, 1000000U, 1000U) ||
+        !mcal_timer_start(I2C_TIMER_INSTANCE))
+    {
+        return false;
+    }
+
+    return true;
 }
 
 /*
