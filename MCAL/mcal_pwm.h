@@ -1,130 +1,28 @@
+/**
+ * @file    mcal_pwm.h
+ * @author  Sungpie
+ * @date    2026-09-05
+ * @version 1.0.0
+ * @brief   MCAL 하드웨어 PWM 드라이버 인터페이스
+ * 
+ * @details TIM1부터 TIM5까지의 범용 및 고급 타이머를 활용하여
+ *          PWM 파형을 생성, 주파수/주기 변경 및 채널별 독립 구동 인터페이스를 제공합니다.
+ * 
+ * @copyright Copyright (c) 2026 Sungpie. All rights reserved.
+ */
 
+#include "common.h"
+#include "macro.h"
 
-//author: sgHyeon
-//date: 2026/08/24
-//version: 1
+#ifndef PWM_H
+#define PWM_H
 
+bool mcal_pwm_init(uint8_t pwm_instance, uint32_t freq, uint32_t arr); //일단 성공 실패만
 
-#ifndef MCAL_PWM_H
-#define MCAL_PWM_H
+bool mcal_pwm_freq_change(uint8_t pwm_instance, uint32_t freq); //arr까지 변경하면 사용 시 매개변수가 헷갈릴 수 있어보여서
+bool mcal_pwm_arr_change(uint8_t pwm_instance, uint32_t arr);
 
-#ifdef __cplusplus
-extern "C" {
+bool mcal_pwm_start(uint8_t pwm_instance, uint8_t cch, uint8_t duty);
+void mcal_pwm_stop(uint8_t pwm_instance, uint8_t cch);
+
 #endif
-
-#include <stdint.h>
-
-#include "mcal_common.h"
-
-
-/* =========================================================================
- * PWM Channel
- * ========================================================================= */
-
-typedef uint8_t mcal_pwm_channel_t;
-
-
-/* =========================================================================
- * PWM Configuration
- * ========================================================================= */
-
-typedef struct
-{
-    uint32_t frequency_hz;
-    uint8_t duty_percent;
-
-} mcal_pwm_config_t;
-
-
-/* =========================================================================
- * PWM API
- * ========================================================================= */
-
-/**
- * @brief Initialize PWM channel.
- *
- * @param[in] channel PWM channel.
- * @param[in] config PWM configuration.
- *
- * @return MCAL status.
- */
-mcal_status_t mcal_pwm_init(mcal_pwm_channel_t channel, const mcal_pwm_config_t *config);
-
-
-/**
- * @brief Deinitialize PWM channel.
- *
- * @param[in] channel PWM channel.
- *
- * @return MCAL status.
- */
-mcal_status_t mcal_pwm_deinit(mcal_pwm_channel_t channel);
-
-
-/**
- * @brief Start PWM output.
- *
- * @param[in] channel PWM channel.
- *
- * @return MCAL status.
- */
-mcal_status_t mcal_pwm_start(mcal_pwm_channel_t channel);
-
-
-/**
- * @brief Stop PWM output.
- *
- * @param[in] channel PWM channel.
- *
- * @return MCAL status.
- */
-mcal_status_t mcal_pwm_stop(mcal_pwm_channel_t channel);
-
-
-/**
- * @brief Set PWM frequency.
- *
- * @param[in] channel PWM channel.
- * @param[in] frequency_hz PWM frequency in Hz.
- *
- * @return MCAL status.
- */
-mcal_status_t mcal_pwm_set_frequency(mcal_pwm_channel_t channel, uint32_t frequency_hz);
-
-
-/**
- * @brief Set PWM duty cycle.
- *
- * @param[in] channel PWM channel.
- * @param[in] duty_percent Duty cycle in percent [0 ~ 100].
- *
- * @return MCAL status.
- */
-mcal_status_t mcal_pwm_set_duty(mcal_pwm_channel_t channel, uint8_t duty_percent);
-
-
-/**
- * @brief Get current PWM frequency.
- *
- * @param[in] channel PWM channel.
- *
- * @return PWM frequency in Hz.
- */
-uint32_t mcal_pwm_get_frequency(mcal_pwm_channel_t channel);
-
-
-/**
- * @brief Get current PWM duty cycle.
- *
- * @param[in] channel PWM channel.
- *
- * @return Duty cycle in percent.
- */
-uint8_t mcal_pwm_get_duty(mcal_pwm_channel_t channel);
-
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* MCAL_PWM_H */

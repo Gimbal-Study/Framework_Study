@@ -1,109 +1,22 @@
+/**
+ * @file    mcal_timer.h
+ * @author  Sungpie
+ * @date    2026-09-05
+ * @version 1.0.0
+ * @brief   하드웨어 타이머 드라이버 인터페이스
+ * 
+ * @details TIM1부터 TIM5까지의 하드웨어 타이머를 추상화하여
+ *          주기적 타이머(Repeat) 및 원샷(One-shot) 제어 기능 등을 제공합니다.
+ * 
+ * @copyright Copyright (c) 2026 Sungpie. All rights reserved.
+ */
 
-
-//author: sgHyeon
-//date: 2026/08/24
-//version: 1
-
-
-
-#ifndef MCAL_TIMER_H
-#define MCAL_TIMER_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef TIMER_H   /* 1. TIMER_H가 정의되어 있지 않다면 진입 */
+#define TIMER_H   /* 2. 진입하자마자 TIMER_H를 정의 */
 
 #include "common.h"
 #include "macro.h"
 
-#define sg      0
-#define ss      1
-#if sg
-/* =========================================================================
- * Timer Instance
- * ========================================================================= */
-
-typedef uint8_t mcal_timer_instance_t;
-
-
-/* =========================================================================
- * Timer Callback
- * ========================================================================= */
-
-/**
- * @brief Timer periodic event callback.
- *
- * This callback is called when the configured timer period has elapsed.
- */
-typedef void (*mcal_timer_callback_t)(void);
-
-
-/* =========================================================================
- * Timer API
- * ========================================================================= */
-
-/**
- * @brief Initialize timer.
- *
- * @param[in] instance Timer instance.
- */
-void mcal_timer_init(mcal_timer_instance_t instance);
-
-
-/**
- * @brief Deinitialize timer.
- *
- * @param[in] instance Timer instance.
- */
-void mcal_timer_deinit(mcal_timer_instance_t instance);
-
-
-/**
- * @brief Start periodic timer.
- *
- * @param[in] instance Timer instance.
- * @param[in] period_us Timer period in microseconds.
- * @param[in] callback Periodic callback.
- *
- * @return MCAL status.
- */
-mcal_status_t mcal_timer_start_periodic(mcal_timer_instance_t instance, uint32_t period_us, mcal_timer_callback_t callback);
-
-
-/**
- * @brief Stop periodic timer.
- *
- * @param[in] instance Timer instance.
- *
- * @return MCAL status.
- */
-mcal_status_t mcal_timer_stop_periodic( mcal_timer_instance_t instance);
-
-
-/**
- * @brief Get current timer counter value.
- *
- * @param[in] instance Timer instance.
- *
- * @return Current counter value.
- */
-uint32_t mcal_timer_get_counter(mcal_timer_instance_t instance);
-
-
-/**
- * @brief Reset timer counter.
- *
- * @param[in] instance Timer instance.
- */
-void mcal_timer_reset(mcal_timer_instance_t instance);
-
-
-#ifdef __cplusplus
-}
-#endif
-#endif
-
-#if ss
 typedef enum {
     MCAL_TIMER_OK = 0,
     MCAL_TIMER_ERROR,
@@ -120,5 +33,3 @@ bool mcal_timer_start(uint8_t timer_instance);
 void mcal_timer_stop(uint8_t timer_instance);
 
 #endif
-
-#endif /* MCAL_TIMER_H */
