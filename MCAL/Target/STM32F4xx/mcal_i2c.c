@@ -1,9 +1,9 @@
 #include "mcal_i2c.h"
 #include "stm32f411xe.h"
 #include <common.h>
-#include "mcal_macro.h"
+#include <macro.h>
 
-bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32 Freq)
+bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32_t Freq)
 {
     if(/* channel == ??? ||*/ Freq == 0)
     {
