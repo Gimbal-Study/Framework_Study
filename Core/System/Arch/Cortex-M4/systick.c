@@ -3,6 +3,7 @@
  * Version : v1.0
  * Target  : STM32F411RE
  */
+#include <stdint.h>
 
 #include "systick.h"
 #include "clock.h"

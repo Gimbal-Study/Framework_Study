@@ -53,11 +53,7 @@ COMMON_FLAGS := \
 	-fdata-sections \
 	-Wall
 
-ifeq ($(BUILD),Release)
 OPT_FLAGS := -O3
-else
-OPT_FLAGS := -Og -g
-endif
 
 CFLAGS := \
 	-std=gnu11 \
