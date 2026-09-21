@@ -6,8 +6,48 @@
 #include <option.h>
 #include <mcal_timer.h>
 
-void Uart_Send_Byte(USART_TypeDef *uart_instance, char data);
+#define UART_TIMER_INSTANCE 2U
+
+// static void Uart_Send_Byte(USART_TypeDef *uart_instance, char data);
 bool uart_timeout_tick(uint8_t timer_instance, uint16_t time);
+
+static volatile uint32_t g_uart_timer_ms = 0U;
+static bool g_uart_timer_started = false;
+
+static bool uart_timeout_expired(uint32_t started, uint16_t timeout)
+{
+  return (uint32_t)(g_uart_timer_ms - started) >= (uint32_t)timeout;
+}
+
+/*
+ * TIM2 인터럽트와 UART 수신 인터럽트가 실행될 수 있는
+ * 메인 코드에서 호출하도록 제한한다.
+ */
+static bool uart_timeout_context_ready(void)
+{
+  return g_uart_timer_started &&
+         (__get_IPSR() == 0U) &&
+         (__get_PRIMASK() == 0U) &&
+         (__get_BASEPRI() == 0U) &&
+         (__get_FAULTMASK() == 0U);
+}
+
+/* 송신 레지스터 여유(TXE) 또는 실제 전송 완료(TC)를 기다린다. */
+static mcal_uart_status_t uart_wait_flag(
+    USART_TypeDef *uart,
+    uint32_t flag,
+    uint32_t started,
+    uint16_t timeout)
+{
+  for (;;)
+  {
+    if (uart_timeout_expired(started, timeout))
+      return MCAL_UART_TIMEOUT;
+
+    if ((uart->SR & flag) != 0U)
+      return MCAL_UART_OK;
+  }
+}
 
 /*USARTx_Pin_Map for STM32*/
 static const Stm32_UartPinConfigType uart1_pinmap =
@@ -206,15 +246,36 @@ mcal_uart_status_t mcal_uart_init(uint8_t uart_instance, uint32_t baud, mcal_par
   // NVIC Interrupt Enable
   NVIC_EnableIRQ(uart_irq);
 
+  /* UART1/2/6이 공유하는 TIM2를 최초 한 번만 시작 */
+  if (!g_uart_timer_started)
+  {
+    g_uart_timer_ms = 0U;
+
+    if (!mcal_timer_repeat_init(
+            UART_TIMER_INSTANCE, 1000000U, 1000U))
+    {
+      return MCAL_UART_ERROR;
+    }
+
+    if (!mcal_timer_start(UART_TIMER_INSTANCE))
+    {
+      mcal_timer_stop(UART_TIMER_INSTANCE);
+      return MCAL_UART_ERROR;
+    }
+
+    g_uart_timer_started = true;
+  }
+
   return MCAL_UART_OK;
 }
 
 /*uart_write*/
-mcal_uart_status_t mcal_uart_write(uint8_t uart_instance, const uint8_t *data, uint16_t len, uint16_t timeout)
+mcal_uart_status_t mcal_uart_write(uint8_t uart_instance, const uint8_t *data, uint16_t len, uint32_t timeout)
 {
   mcal_timer_start(2);
-  uint8_t *data8b_ptr = (uint8_t *)data;
   static const Stm32_UartPinConfigType *uart_s;
+  mcal_uart_status_t status;
+  uint32_t started;
 
   switch (uart_instance)
   {
@@ -235,40 +296,144 @@ mcal_uart_status_t mcal_uart_write(uint8_t uart_instance, const uint8_t *data, u
     break;
   }
 
-  for (int i = 0; i < len; i++)
+  if (uart_s == NULL || data == NULL || len == 0U)
+    return MCAL_UART_ERROR;
+
+  if (timeout == 0U)
+    return MCAL_UART_TIMEOUT;
+
+  if (!uart_timeout_context_ready())
+    return MCAL_UART_ERROR;
+
+  /* UART와 송신 기능이 활성화되어 있어야 한다. */
+  if ((uart_s->USART_target->CR1 & (USART_CR1_UE | USART_CR1_TE)) !=
+      (USART_CR1_UE | USART_CR1_TE))
+  {
+    return MCAL_UART_ERROR;
+  }
+
+  /* 전체 송신에 사용할 시작 시각: 한 번만 저장 */
+  started = g_uart_timer_ms;
+
+  for (uint16_t i = 0; i < len; i++)
+  {
+    /* 기존 줄바꿈 처리 유지: LF 앞에 CR 추가 */
+    if (data[i] == (uint8_t)'\n')
+    {
+      status = uart_wait_flag(
+          uart_s->USART_target, USART_SR_TXE, started, timeout);
+
+      if (status != MCAL_UART_OK)
+        return status;
+
+      uart_s->USART_target->DR = (uint8_t)'\r';
+    }
+
+    status = uart_wait_flag(
+        uart_s->USART_target, USART_SR_TXE, started, timeout);
+
+    if (status != MCAL_UART_OK)
+      return status;
+
+    uart_s->USART_target->DR = data[i];
+  }
+
+  /* 마지막 바이트가 핀으로 전송 완료될 때까지 확인 */
+  return uart_wait_flag(
+      uart_s->USART_target, USART_SR_TC, started, timeout);
+}
+/*
   {
     Uart_Send_Byte(uart_s->USART_target, *data8b_ptr++);
   }
-
   return MCAL_UART_OK;
-}
+  }
+ */
 
-mcal_uart_status_t mcal_uart_read(uint8_t uart_instance, uint8_t *data, uint16_t len, uint16_t timeout)
+mcal_uart_status_t mcal_uart_read(uint8_t uart_instance, uint8_t *data, uint16_t len, uint32_t timeout)
 {
-  // mcal_timer_
+  static const Stm32_UartPinConfigType *uart_s;
   queue_t *uart_q;
-  uint8_t *data8b_ptr = data;
+  IRQn_Type uart_irq;
+  uint32_t started;
 
   switch (uart_instance)
   {
   case 1:
+    uart_s = &uart1_pinmap;
     uart_q = &uart1_q;
+    uart_irq = USART1_IRQn;
+    
     break;
 
   case 2:
+    uart_s = &uart2_pinmap;
     uart_q = &uart2_q;
+    uart_irq = USART2_IRQn;
     break;
 
   case 6:
+    uart_s = &uart6_pinmap;
     uart_q = &uart6_q;
+    uart_irq = USART6_IRQn;
     break;
 
   default:
     return MCAL_UART_ERROR;
   }
 
-  // while(시간이 timeout이 넘었거나 || uart_q-> rear - uart_q->front == len)
+  if (uart_s == NULL || data == NULL || len == 0U)
+    return MCAL_UART_ERROR;
 
+  if (timeout == 0U)
+    return MCAL_UART_TIMEOUT;
+
+  if (!uart_timeout_context_ready())
+    return MCAL_UART_ERROR;
+
+  if ((uart_s->USART_target->CR1 &
+       (USART_CR1_UE | USART_CR1_RE | USART_CR1_RXNEIE)) !=
+      (USART_CR1_UE | USART_CR1_RE | USART_CR1_RXNEIE))
+  {
+    return MCAL_UART_ERROR;
+  }
+
+  if (NVIC_GetEnableIRQ(uart_irq) == 0U)
+    return MCAL_UART_ERROR;
+
+  started = g_uart_timer_ms;
+
+  for (uint16_t i = 0U; i < len; ++i)
+  {
+    for (;;)
+    {
+      uint32_t saved_irq;
+      bool received;
+
+      if (uart_timeout_expired(started, timeout))
+        return MCAL_UART_TIMEOUT;
+
+      /*
+       * 큐를 꺼내는 짧은 구간만 보호한다.
+       * 데이터가 도착하기를 기다리는 동안에는
+       * 인터럽트를 허용해야 한다.
+       */
+      saved_irq = __get_PRIMASK();
+      __disable_irq();
+
+      received = read_queue(uart_q, &data[i]);
+
+      __set_PRIMASK(saved_irq);
+
+      if (received)
+        break;
+    }
+  }
+
+  return MCAL_UART_OK;
+}
+
+#if 0
   for (int i = 0; i < len; i++)
   {
     if (queue_empty(uart_q))
@@ -282,8 +447,12 @@ mcal_uart_status_t mcal_uart_read(uint8_t uart_instance, uint8_t *data, uint16_t
 
   return MCAL_UART_OK;
 }
+#endif
 
-void Uart_Send_Byte(USART_TypeDef *uart_instance, char data)
+
+
+#if 0
+static void Uart_Send_Byte(USART_TypeDef *uart_instance, char data)
 {
   if (data == '\n')
   {
@@ -296,8 +465,6 @@ void Uart_Send_Byte(USART_TypeDef *uart_instance, char data)
     ;
   uart_instance->DR = data;
 }
-
-#if 0
 mcal_uart_status_t mcal_uart_Rx_Handler(uint8_t uart_instance)
 {
   switch(uart_instance)
@@ -398,5 +565,15 @@ void USART6_IRQHandler(void)
 
     insert_queue(&uart6_q, data);
     NVIC_ClearPendingIRQ(USART6_IRQn);
+  }
+}
+
+/* TIM2는 UART timeout용으로 전용 사용 */
+void TIM2_IRQHandler(void)
+{
+  if ((TIM2->SR & TIM_SR_UIF) != 0U)
+  {
+    TIM2->SR = 0U;
+    ++g_uart_timer_ms;
   }
 }
