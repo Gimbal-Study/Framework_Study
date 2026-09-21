@@ -1,183 +1,145 @@
-# ============================================================
-# Tool information
-# ============================================================
-TOOL_DIR       = C:\arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi
-VERSION        = 15.2.1
-TARGET         = arm-none-eabi
+PROJECT := FrameWork
+BUILD ?= Debug
 
+CROSS_COMPILE ?= arm-none-eabi-
+CC := $(CROSS_COMPILE)gcc
+SIZE := $(CROSS_COMPILE)size
+OBJDUMP := $(CROSS_COMPILE)objdump
+OPENOCD ?= openocd
 
-# ============================================================
-# Project name & Link script
-# ============================================================
-OUT_FILE_NAME  = rom_0x08000000
-LDS_FILE_NAME  = rom_0x08000000.lds
+LINKER_SCRIPT := Board/NUCLEO_F411RE/STM32F411RETX_FLASH.ld
 
+C_SOURCES := \
+	Board/NUCLEO_F411RE/board_init.c \
+	CMSIS/Device/STM32F4xx/system_stm32f4xx.c \
+	Core/System/clock.c \
+	Core/System/syscalls.c \
+	Core/System/sysmem.c \
+	Core/System/systick.c \
+	Core/main.c \
+	MCAL/Target/mcal_gpio.c \
+	Test/gpio_test.c
 
-# ============================================================
-# Compiler Options
-# STM32F411RE = Cortex-M4 + FPU
-# ============================================================
-CFLAGS  = -mcpu=cortex-m4
-CFLAGS += -mthumb
-CFLAGS += -mfpu=fpv4-sp-d16
-CFLAGS += -mfloat-abi=hard
-CFLAGS += -DSTM32F411xE
-CFLAGS += -std=gnu99
-CFLAGS += -O3
-CFLAGS += -Wall
-CFLAGS += -g
-CFLAGS += -fno-builtin
-CFLAGS += -funsigned-char
-CFLAGS += -fno-strict-aliasing
-CFLAGS += -fno-common
+ASM_SOURCES := \
+	Board/NUCLEO_F411RE/Startup/startup_stm32f411retx.s
 
+INCLUDES := \
+	-IInc \
+	-ICMSIS/Core \
+	-ICMSIS/Device/STM32F4xx \
+	-ICommon \
+	-IConfig \
+	-ICore/System \
+	-IMCAL \
+	-ITest \
+	-IBoard/NUCLEO_F411RE
 
-# ============================================================
-# Linker Options
-# ============================================================
-LDFLAGS  = -mcpu=cortex-m4
-LDFLAGS += -mthumb
-LDFLAGS += -mfpu=fpv4-sp-d16
-LDFLAGS += -mfloat-abi=hard
-LDFLAGS += --specs=nano.specs
-LDFLAGS += --specs=nosys.specs
-LDFLAGS += -u _printf_float
-LDFLAGS += -u _scanf_float
-LDFLAGS += -nostartfiles
-LDFLAGS += -ffreestanding
-LDFLAGS += -Wl,-Map=$(OUT_FILE_NAME).map
-LDFLAGS += -Wl,--cref
-LDFLAGS += -Wl,-EL
-LDFLAGS += -T $(LDS_FILE_NAME)
+DEFINES := \
+	-DDEBUG \
+	-DNUCLEO_F411RE \
+	-DSTM32 \
+	-DSTM32F4 \
+	-DSTM32F411RETx
 
+CPU_FLAGS := \
+	-mcpu=cortex-m4 \
+	-mfpu=fpv4-sp-d16 \
+	-mfloat-abi=hard \
+	-mthumb
 
-# ============================================================
-# Output Files
-# ============================================================
-OUT_BIN_FILE   = $(OUT_FILE_NAME).bin
-OUT_ELF_FILE   = $(OUT_FILE_NAME).elf
-OUT_MAP_FILE   = $(OUT_FILE_NAME).map
+COMMON_FLAGS := \
+	$(CPU_FLAGS) \
+	-ffunction-sections \
+	-fdata-sections \
+	-Wall
 
+OPT_FLAGS := -O3
 
-# ============================================================
-# Tool setting
-# ============================================================
-AS      = "$(TOOL_DIR)/bin/$(TARGET)-as"
-CC      = "$(TOOL_DIR)/bin/$(TARGET)-gcc"
-LD      = "$(TOOL_DIR)/bin/$(TARGET)-ld"
-OBJCOPY = "$(TOOL_DIR)/bin/$(TARGET)-objcopy"
-OBJDUMP = "$(TOOL_DIR)/bin/$(TARGET)-objdump"
+CFLAGS := \
+	-std=gnu11 \
+	$(COMMON_FLAGS) \
+	$(OPT_FLAGS) \
+	-fstack-usage \
+	-MMD \
+	-MP \
+	--specs=nano.specs
 
+ASFLAGS := \
+	$(COMMON_FLAGS) \
+	$(OPT_FLAGS) \
+	-x assembler-with-cpp \
+	-MMD \
+	-MP \
+	--specs=nano.specs
 
-# ============================================================
-# Source Files
-# ============================================================
-CSRC = \
-    Core/main.c \
-    Core/System/system_stm32f4xx.c \
-    Core/System/clock.c \
-    MCAL/Target/STM32F4xx/stm32_uart.c \
-    MCAL/Target/STM32F4xx/stm32_queue.c \
-    MCAL/Target/STM32F4xx/stm32_timer.c \
-    MCAL/Target/STM32F4xx/mcal_i2c.c \
-    Device/Sensor/MPU6050.c \
-    Test/uart_test.c \
-    Core/System/systick.c
+LDFLAGS := \
+	$(CPU_FLAGS) \
+	-T$(LINKER_SCRIPT) \
+	--specs=nosys.specs \
+	--specs=nano.specs \
+	-Wl,-Map=$(BUILD)/$(PROJECT).map \
+	-Wl,--gc-sections \
+	-static
 
-ASRC = \
-    Board/NUCLEO_F411RE/crt0.s
+LDLIBS := \
+	-Wl,--start-group \
+	-lc \
+	-lm \
+	-Wl,--end-group
 
+C_OBJECTS := $(addprefix $(BUILD)/,$(C_SOURCES:.c=.o))
+ASM_OBJECTS := $(addprefix $(BUILD)/,$(ASM_SOURCES:.s=.o))
+OBJECTS := $(C_OBJECTS) $(ASM_OBJECTS)
+DEPS := $(OBJECTS:.o=.d)
 
-# ============================================================
-# Object Files
-# ============================================================
-COBJS = $(CSRC:.c=.o)
-AOBJS = $(ASRC:.s=.o)
+ELF := $(BUILD)/$(PROJECT).elf
+MAP := $(BUILD)/$(PROJECT).map
+LIST := $(BUILD)/$(PROJECT).list
 
-OBJS = $(COBJS) $(AOBJS)
+ifeq ($(OS),Windows_NT)
+define make-output-dir
+	@if not exist "$(subst /,\,$(patsubst %/,%,$(dir $@)))" mkdir "$(subst /,\,$(patsubst %/,%,$(dir $@)))"
+endef
+define remove-build-dir
+	@if exist "$(subst /,\,$(BUILD))" rmdir /S /Q "$(subst /,\,$(BUILD))"
+endef
+else
+define make-output-dir
+	@mkdir -p "$(dir $@)"
+endef
+define remove-build-dir
+	@rm -rf "$(BUILD)"
+endef
+endif
 
+.DEFAULT_GOAL := all
 
-# ============================================================
-# Library / Include
-# ============================================================
-C_DIR   = $(TOOL_DIR)/$(TARGET)
-GCC_DIR = $(TOOL_DIR)/lib/gcc/$(TARGET)/$(VERSION)
+.PHONY: all clean run flash size
 
-LIB_OPTION = \
-    -L "$(C_DIR)/lib/thumb2" \
-    -L "$(GCC_DIR)/thumb2" \
-    -lc \
-    -lgcc
+all: $(ELF) $(LIST) size
 
-INCLUDE = \
-    -nostdinc \
-    -I. \
-    -I Board/NUCLEO_F411RE \
-    -I MCAL \
-    -I Common \
-    -I Device/Sensor \
-    -I Core/System \
-    -I CMSIS/Core \
-    -I Test \
-    -I CMSIS/Device/STM32F4xx \
-    -I CMSIS/Device/STM32F4xx \
-    -I Core/System \
-    -I "$(C_DIR)/include" \
-    -I "$(GCC_DIR)/include"
+$(BUILD)/%.o: %.c Makefile
+	$(make-output-dir)
+	$(CC) $(DEFINES) $(INCLUDES) $(CFLAGS) -c "$<" -o "$@"
 
+$(BUILD)/%.o: %.s Makefile
+	$(make-output-dir)
+	$(CC) $(DEFINES) $(INCLUDES) $(ASFLAGS) -c "$<" -o "$@"
 
-# ============================================================
-# Default Target
-# ============================================================
-.PHONY: all clean run
+$(ELF): $(OBJECTS) $(LINKER_SCRIPT) Makefile
+	$(make-output-dir)
+	$(CC) $(OBJECTS) $(LDFLAGS) $(LDLIBS) -o "$@"
 
-all: $(OUT_BIN_FILE)
+$(LIST): $(ELF)
+	$(OBJDUMP) -h -S "$<" > "$@"
 
+size: $(ELF)
+	$(SIZE) "$<"
 
-# ============================================================
-# C compile
-# ============================================================
-%.o: %.c
-	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
+flash run: $(ELF)
+	$(OPENOCD) -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program $(ELF) verify reset exit"
 
-
-# ============================================================
-# Assembly compile
-# ============================================================
-%.o: %.s
-	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
-
-
-# ============================================================
-# ELF Link
-# ============================================================
-$(OUT_ELF_FILE): $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) $(LIB_OPTION) -o $@
-
-
-# ============================================================
-# BIN / DUMP
-# ============================================================
-$(OUT_BIN_FILE): $(OUT_ELF_FILE)
-	$(OBJCOPY) $(OUT_ELF_FILE) $(OUT_BIN_FILE) -O binary
-	$(OBJDUMP) -x -D $(OUT_ELF_FILE) > __dump.txt
-	$(OBJDUMP) -x -D -S $(OUT_ELF_FILE) > __dump_all.txt
-
-
-# ============================================================
-# Clean
-# ============================================================
 clean:
-	rm -f $(OUT_BIN_FILE)
-	rm -f $(OUT_ELF_FILE)
-	rm -f $(OUT_MAP_FILE)
-	rm -f $(OBJS)
-	rm -f __dump.txt
-	rm -f __dump_all.txt
+	$(remove-build-dir)
 
-
-# ============================================================
-# Flash
-# ============================================================
-run: $(OUT_ELF_FILE)
-	STM32_Programmer_CLI.exe -c port=SWD -w ./$(OUT_ELF_FILE) -v -rst -q
+-include $(DEPS)
