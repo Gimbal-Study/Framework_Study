@@ -26,13 +26,13 @@ static MPU6050_Status bus_status(mcal_i2c_status_t status)
 static MPU6050_Status read_byte(const MPU6050_Device *dev, uint8_t reg_addr, uint8_t *data)
 {
     return bus_status(mcal_i2c_read(dev->config.channel, dev->config.address, reg_addr, 1U,/* 레지스터 주소 길이 */
-        data, 1U, 0/*dev->config.timeout_ms*/));    
+        data, 1U, dev->config.timeout_ms));    
 };
 
 static MPU6050_Status write_byte(const MPU6050_Device *dev,
                                  uint8_t reg_addr, uint8_t value)
 {
-    return mcal_i2c_write(dev->config.channel, dev->config.address, reg_addr, 1, (const uint8_t*)&value, 1U, 0);
+    return mcal_i2c_write(dev->config.channel, dev->config.address, reg_addr, 1, (const uint8_t*)&value, 1U, dev->config.timeout_ms);
 };
 
 static bool valid_dmp_config(const MPU6050_Config *config)
@@ -154,8 +154,8 @@ static MPU6050_Status MPU6050_WriteMemoryBlock(
         if (status != MPU6050_OK)
             return status;
 
-        status = bus_status(mcal_i2c_write(dev->config.channel, dev->config.address, MPU6050_REG_MEM_R_W, 1U,
-            &data[done], chunk, 0));
+        status = bus_status(mcal_i2c_write(dev->config.channel, dev->config.address, MPU6050_REG_MEM_R_W,
+            1U, &data[done], chunk, dev->config.timeout_ms));
         if (status != MPU6050_OK)
             return status;
 
@@ -165,7 +165,7 @@ static MPU6050_Status MPU6050_WriteMemoryBlock(
             if (status != MPU6050_OK)
                 return status;
 
-            status = mcal_i2c_read(dev->config.channel, dev->config.address, MPU6050_REG_MEM_R_W, 1U, verify_buffer, chunk, 0);
+            status = mcal_i2c_read(dev->config.channel, dev->config.address, MPU6050_REG_MEM_R_W, 1U, verify_buffer, chunk, dev->config.timeout_ms);
             if (status != MPU6050_OK)
                 return status;
 

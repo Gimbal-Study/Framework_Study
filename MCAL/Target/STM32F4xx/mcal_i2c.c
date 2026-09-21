@@ -3,22 +3,19 @@
 #include <common.h>
 #include <macro.h>
 
-#define I2C_TIMER_INSTANCE  4U
-#define I2C_TIMEOUT_MAX_MS  60000U
+#define I2C_TIMER_INSTANCE 4
 
-static volatile uint32_t g_i2c_timer_ms = 0U;
-static bool g_i2c_timer_initialized = false;
+/* 인터럽트와 메인 코드가 공유하는 밀리초 카운터 */
+static volatile uint32_t g_i2c_timer_ms = 0;
 
-/* TIM4 업데이트 인터럽트: 1ms마다 누적값 증가 */
+/* TIM4 인터럽트 핸들러: 1ms마다 카운터 증가 */
 void TIM4_IRQHandler(void)
 {
-    if ((TIM4->SR & TIM_SR_UIF) != 0U) {
-        /*
-         * TIM4는 I2C 시간원 전용.
-         * 다른 캡처/비교 이벤트는 사용하지 않는다.
-         */
-        TIM4->SR = 0U;
-        ++g_i2c_timer_ms;
+    if (TIM4->SR & TIM_SR_UIF)
+    {
+        TIM4->SR &= ~TIM_SR_UIF;
+        NVIC_ClearPendingIRQ(TIM4_IRQn);
+        g_i2c_timer_ms++;
     }
 }
 
