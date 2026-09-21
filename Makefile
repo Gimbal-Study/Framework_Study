@@ -12,7 +12,7 @@ LINKER_SCRIPT := Board/NUCLEO_F411RE/STM32F411RETX_FLASH.ld
 C_SOURCES := \
 	Board/NUCLEO_F411RE/board_init.c \
 	CMSIS/Device/STM32F4xx/system_stm32f4xx.c \
-	Core/System/clock.c \
+	Core/System/Target/STM32F4xx/clock.c \
 	Core/System/syscalls.c \
 	Core/System/sysmem.c \
 	Core/System/systick.c \
@@ -30,6 +30,7 @@ INCLUDES := \
 	-ICommon \
 	-IConfig \
 	-ICore/System \
+	-ICore/System/Target/STM32F4xx \
 	-IMCAL \
 	-ITest \
 	-IBoard/NUCLEO_F411RE

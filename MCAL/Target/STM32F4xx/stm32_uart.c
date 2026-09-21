@@ -1,6 +1,6 @@
-#include <common.h>
+#include <mcal_common.h>
 #include <mcal_uart.h>
-#include <macro.h>
+#include <mcal_macro.h>
 #include <pinmap_config.h>
 #include <string.h>
 #include <option.h>

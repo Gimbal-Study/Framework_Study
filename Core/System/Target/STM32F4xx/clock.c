@@ -9,6 +9,7 @@
 #include "clock.h"
 #include "stm32f411xe.h"
 #include "mcal_macro.h"
+#include "option.h"
 
 
 void clock_init(void)
