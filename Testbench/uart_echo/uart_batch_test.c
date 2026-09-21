@@ -1,5 +1,5 @@
 /* Text batch echo; select this instead of either other uart_test_main. */
-#include <common.h>
+#include "mcal_common.h"
 #include <mcal_uart.h>
 #include <stm32f411xe.h>
 #include <systick.h>

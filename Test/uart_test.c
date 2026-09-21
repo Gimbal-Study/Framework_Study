@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <string.h>
-#include <common.h>
+#include "mcal_common.h"
 #include <mcal_uart.h>
 #include <test.h>
 #include <systick.h>
 #include <stm32f411xe.h>
-#include "macro.h"
+#include "mcal_macro.h"
 
 #define BASIC 0
 #define STRING_TEST 0

@@ -1,42 +1,184 @@
 #include "mcal_i2c.h"
 #include "stm32f411xe.h"
-#include <common.h>
-#include "mcal_macro.h"
+#include "mcal_timer.h"
 
-bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32 Freq)
+#define I2C_TIMER_INSTANCE 4
+
+/* 인터럽트와 메인 코드가 공유하는 밀리초 카운터 */
+static volatile uint32_t g_i2c_timer_ms = 0;
+static bool g_i2c_timer_initialized = false;
+
+/* TIM4 인터럽트 핸들러: 1ms마다 카운터 증가 */
+void TIM4_IRQHandler(void)
 {
-    if(/* channel == ??? ||*/ Freq == 0)
+    if (TIM4->SR & TIM_SR_UIF)
+    {
+        TIM4->SR &= ~TIM_SR_UIF;
+        NVIC_ClearPendingIRQ(TIM4_IRQn);
+        g_i2c_timer_ms++;
+    }
+}
+
+/* I2C 내부에서 사용하는 밀리초 시간값 */
+static uint32_t i2c_time_ms(void)
+{
+    return g_i2c_timer_ms;
+}
+
+/* 타이머와 인터럽트 경로가 활성화되어 있는지 확인 */
+static bool i2c_timebase_running(void)
+{
+    if (!g_i2c_timer_initialized)
+        return false;
+
+    if ((RCC->APB1ENR & RCC_APB1ENR_TIM4EN) == 0U)
+        return false;
+
+    if ((TIM4->CR1 & TIM_CR1_CEN) == 0U)
+        return false;
+
+    if ((TIM4->DIER & TIM_DIER_UIE) == 0U)
+        return false;
+
+    if (NVIC_GetEnableIRQ(TIM4_IRQn) == 0U)
+        return false;
+
+    return true;
+}
+
+
+/*
+ * 인터럽트로 시간이 증가하는 방식이므로,
+ * blocking I2C는 인터럽트가 허용된 메인 코드에서 사용한다.
+ */
+static bool i2c_timeout_context_ready(void)
+{
+    if (__get_IPSR() != 0U)
+        return false;
+
+    if (__get_PRIMASK() != 0U ||
+        __get_BASEPRI() != 0U ||
+        __get_FAULTMASK() != 0U)
+        return false;
+
+    return i2c_timebase_running();
+}
+
+bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32_t Freq)
+{
+    // 매개변수 값 유효성 검사
+    if (channel < 1 || channel > 2 || Freq == 0)
     {
         return false;
     }
 
-    // 2. 하드웨어 주변장치 클록 인가 (I2C1, GPIOB)
-    RCC->APB1ENR |= RCC_APB1ENR_I2C1EN; //  (0x1UL << 21U)
-    RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // (0x1UL << 1U)
+    // I2C 하드웨어 레지스터 주소를 가리키는 포인터
+    I2C_TypeDef *i2c_instance;
 
-    // 3. GPIO 핀 설정 (PB6 = SCL, PB7 = SDA)
-    // MODER: PB6, PB7을 대체 기능 모드(Alternate Function, 10b)로 설정
-    GPIOB->MODER &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
-    GPIOB->MODER |= ((0x2U << (6 * 2)) | (0x3U << (7 * 2)));
+    switch (channel)
+    {
+    case 1:
+        // 실제 I2C1 하드웨어 주소 지정
+        i2c_instance = I2C1;
 
-    // OTYPER: I2C 필수 조건인 Open-Drain(1) 설정
-    GPIOB->OTYPER |= (0x1U << 6) | (0x1U << 7);
+        // 2. 하드웨어 주변장치 클록 인가 (I2C1, GPIOB)
+        RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;  //  (0x1UL << 21U)
+        RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN; // (0x1UL << 1U)
 
-    // PUPDR: MCU 내부 풀업
-    GPIOB->PUPDR &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
-    GPIOB->PUPDR |= ((0x1U << (6 * 2)) | (0x1U << (7 * 2)));
+        // 3. GPIO 핀 설정 (PB6 = SCL, PB7 = SDA)
+        // MODER: PB6, PB7을 대체 기능 모드(Alternate Function, 10b)로 설정
+        GPIOB->MODER &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
+        GPIOB->MODER |= ((0x2U << (6 * 2)) | (0x2U << (7 * 2)));
 
-    // AFR[0]: PB6, PB7에 AF4(I2C1 기능 번호) 부여
-    GPIOB->AFR[0] &= ~((0xFU << (6 * 4)) | (0xFU << (7 * 4)));
-    GPIOB->AFR[0] |= ((0x4U << (6 * 4)) | (0x4U << (7 * 4)));
+        // OTYPER: I2C 필수 조건인 Open-Drain(1) 설정
+        GPIOB->OTYPER |= (0x1U << 6) | (0x1U << 7);
+
+        // PUPDR: MCU 내부 풀업
+        GPIOB->PUPDR &= ~((0x3U << (6 * 2)) | (0x3U << (7 * 2)));
+        GPIOB->PUPDR |= ((0x1U << (6 * 2)) | (0x1U << (7 * 2)));
+
+        // AFR[0]: PB6, PB7에 AF4(I2C1 기능 번호) 부여
+        GPIOB->AFR[0] &= ~((0xFU << (6 * 4)) | (0xFU << (7 * 4)));
+        GPIOB->AFR[0] |= ((0x4U << (6 * 4)) | (0x4U << (7 * 4)));
+
+        break;
+
+    case 2:
+        // 실제 I2C2 하드웨어 주소 지정 (PB10 = SCL, PB11 = SDA)
+        i2c_instance = I2C2;
+
+        RCC->APB1ENR |= RCC_APB1ENR_I2C2EN;
+        RCC->AHB1ENR |= RCC_AHB1ENR_GPIOBEN;
+
+        // PB10, PB11 Alternate Function(0x2)
+        GPIOB->MODER &= ~((0x3U << (10 * 2)) | (0x3U << (11 * 2)));
+        GPIOB->MODER |= ((0x2U << (10 * 2)) | (0x2U << (11 * 2)));
+
+        // Open-Drain 설정
+        GPIOB->OTYPER |= (0x1U << 10) | (0x1U << 11);
+
+        // 내부 풀업 설정
+        GPIOB->PUPDR &= ~((0x3U << (10 * 2)) | (0x3U << (11 * 2)));
+        GPIOB->PUPDR |= ((0x1U << (10 * 2)) | (0x1U << (11 * 2)));
+
+        // AFR[1]: PB10, PB11에 AF4(I2C2) 부여 (핀 번호가 8 이상이므로 AFR[1] 사용)
+        GPIOB->AFR[1] &= ~((0xFU << ((10 - 8) * 4)) | (0xFU << ((11 - 8) * 4)));
+        GPIOB->AFR[1] |= ((0x4U << ((10 - 8) * 4)) | (0x4U << ((11 - 8) * 4)));
+
+        break;
+    }
 
     // I2C 하드웨어 타이밍 설정
     // 레지스터 설정 전 반드시 I2C 모듈을 잠시 꺼두어야 함
-    I2C1->CR1 &= ~I2C_CR1_PE; // (0x1UL << 0U)
+    i2c_instance->CR1 &= ~I2C_CR1_PE; // (0x1UL << 0U)
 
-    // I2C에 APB1 클록 주파수(MHz)를 알려줌
+    // I2C에 APB1 클록 주파수(MHz)를 알려줌. 설정하는 것이 아님.
     // 해당 프로젝트에서는 STM32에 공급되는 주파수가 96MHz. 이것의 절반.
-    I2C1->CR2 = 48; //
+    i2c_instance->CR2 = 48; //
+
+    // 표준 모드 (SCL -> 100KHz)
+    if (mode == 0)
+    {
+        // CCR은 12비트 이므로 12비트 중 가장 작은 값인 16비트로 변수 선언
+        uint16_t ccr_val = (uint16_t)(48000000 / (2U * Freq));
+
+        // 레퍼런스 매뉴얼에 최소값 4 명시되어 있음 (p.499)
+        if (ccr_val < 4)
+            ccr_val = 4;
+
+        i2c_instance->CCR = ccr_val;
+
+        // I2C 표준 규격 최대 상승 시간 : 표준 모드에서 전압이 0V -> 3V로 올라갈 때 허용되는 최대 시간은 1us
+        // 1us X 48MHz = 48 -> MCU는 시간을 모른다. 카운터만 알고 있으므로 48번 카운트.
+        i2c_instance->TRISE = 48 + 1;
+    }
+
+    // 고속 모드 (SCL -> 400KHz)
+    else
+    {
+        uint16_t ccr_val = (uint16_t)(48000000 / (3U * Freq));
+
+        // 고속 모드에서는 최솟값 1
+        if (ccr_val < 1)
+            ccr_val = 1;
+
+        i2c_instance->CCR = (1U << 15) | ccr_val;
+        i2c_instance->TRISE = ((48 * 300U) / 1000U) + 1; /* 300ns 기준 */
+    }
+
+    // 설정 완료 후 I2C 모듈 활성화 (PE = 1)
+    i2c_instance->CR1 |= I2C_CR1_PE;
+
+    g_i2c_timer_ms = 0U;
+    if (!mcal_timer_repeat_init(I2C_TIMER_INSTANCE, 1000000U, 1000U) ||
+        !mcal_timer_start(I2C_TIMER_INSTANCE))
+    {
+        return false;
+    }
+
+    g_i2c_timer_initialized = true;
+
+    return true;
 }
 
 /*
@@ -49,7 +191,7 @@ bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32 Freq)
  * - RCC, GPIO, CCR, TRISE 등 초기화 완료, PE=1, 일반 I2C 모드.
  * - 같은 채널을 다른 태스크/ISR/DMA가 동시에 사용하지 않는다.
  *   BUSY 검사는 소프트웨어 mutex를 대신하지 않는다.
- * - mcal_time_ms()를 플랫폼에서 구현해야 한다. 대기 중에도 증가해야 한다.
+ * - i2c_time_ms()는 TIM4 인터럽트가 동작하는 동안 증가한다.
  * - dev_addr는 이동 전 7비트 주소이다. 10비트 주소는 지원하지 않는다.
  * - mem_addr_size: 0=주소 없음, 1=8비트, 2=16비트(MSB 먼저).
  * - 전송 방향은 write/read 함수가 내부에서 결정한다. rw 인수는 없다.
@@ -63,9 +205,6 @@ bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32 Freq)
  * - STM32 환경에서 unsigned int가 32비트인 조건을 사용한다.
  * - 실제 적용 전 read 길이 1/2/3/4 이상 및 NACK/timeout을 검증한다.
  */
-
-/* 구현 필요: 1 ms 단위로 증가하는 시간을 반환한다. */
-extern uint32_t mcal_time_ms(void);
 
 #define I2C_DIRECTION_WRITE 0U
 #define I2C_DIRECTION_READ  1U
@@ -87,7 +226,7 @@ static I2C_TypeDef *i2c_get_instance(uint8_t channel)
 /* unsigned 뺄셈으로 tick wraparound를 처리한다. */
 static bool i2c_expired(uint32_t started, uint32_t timeout_ms)
 {
-    return (uint32_t)(mcal_time_ms() - started) >= timeout_ms;
+    return (uint32_t)(i2c_time_ms() - started) >= timeout_ms;
 }
 
 /* 오류를 우선 검사하며 SR1 이벤트를 기다린다. */
@@ -208,7 +347,7 @@ static mcal_i2c_status_t i2c_mem_addr_write(I2C_TypeDef *i2c,
         return MCAL_I2C_ERROR;
     if (mem_addr_size == 0U)
         return MCAL_I2C_OK;
-    if (mem_addr_size == 2U)
+    else if (mem_addr_size == 2U)
     {
         status = i2c_wait_event(i2c, I2C_SR1_TXE, started, timeout_ms);
         if (status != MCAL_I2C_OK)
@@ -274,7 +413,7 @@ mcal_i2c_status_t mcal_i2c_write(uint8_t channel, uint16_t dev_addr,
     status = i2c_check_ready(i2c);
     if (status != MCAL_I2C_OK)
         return status;
-    started = mcal_time_ms();
+    started = i2c_time_ms();
     i2c->CR1 &= ~(I2C_CR1_ACK | I2C_CR1_POS);
     status = i2c_address_begin(i2c, dev_addr, I2C_DIRECTION_WRITE,
         started, timeout_ms);
@@ -310,7 +449,7 @@ fail:
  */
 mcal_i2c_status_t mcal_i2c_read(uint8_t channel, uint16_t dev_addr,
     uint16_t mem_addr, uint8_t mem_addr_size,
-    uint8_t *data, uint16_t len, unsigned int timeout)
+    uint8_t *data, uint16_t len, uint32_t timeout)
 {
     I2C_TypeDef *i2c;
     mcal_i2c_status_t status;
@@ -328,7 +467,7 @@ mcal_i2c_status_t mcal_i2c_read(uint8_t channel, uint16_t dev_addr,
     status = i2c_check_ready(i2c);
     if (status != MCAL_I2C_OK)
         return status;
-    started = mcal_time_ms();
+    started = i2c_time_ms();
     i2c->CR1 = (i2c->CR1 & ~I2C_CR1_POS) | I2C_CR1_ACK;
     if (mem_addr_size != 0U)
     {

@@ -1,7 +1,7 @@
 #ifndef MCAL_I2C_H
 #define MCAL_I2C_H
 
-#include "common.h"
+#include "mcal_common.h"
 
 typedef enum {
     MCAL_I2C_OK = 0,  /* 정상적으로 통신 완료 */

@@ -1,6 +1,8 @@
 #ifndef MCAL_UART_H
 #define MCAL_UART_H
 
+#include "mcal_common.h"
+
 typedef enum{
 	NONE,
 	ODD,
