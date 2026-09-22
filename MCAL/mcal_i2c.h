@@ -10,15 +10,20 @@ typedef enum {
     MCAL_I2C_TIMEOUT  /* 센서 응답 지연 */
 } mcal_i2c_status_t;
 
+
 bool mcal_i2c_init(uint8_t channel, uint8_t mode, uint32_t Freq);
 
+//메모리에서 register에 접근할  주소.
 mcal_i2c_status_t mcal_i2c_write(uint8_t channel, uint16_t dev_addr,
     uint16_t mem_addr, uint8_t mem_adddr_size, const uint8_t *data, uint16_t len, uint32_t timeout);
 
-mcal_i2c_status_t mcal_i2c_read(uint8_t channel, uint16_t dev_addr, uint16_t reg_addr,
+//메모리에서 register에 접근할  주소.
+mcal_i2c_status_t mcal_i2c_read(uint8_t channel, uint16_t dev_addr,
+    uint16_t mem_addr, uint8_t mem_addr_size,
     uint8_t *data, uint16_t len, uint32_t timeout);
 
 
+void mcal_i2c_tim4_irq_handler(void);
 #if 0
 //author: sgHyeon
 //date: 2026/08/24

@@ -8,13 +8,12 @@
 static volatile uint32_t g_i2c_timer_ms = 0;
 static bool g_i2c_timer_initialized = false;
 
-/* TIM4 인터럽트 핸들러: 1ms마다 카운터 증가 */
-void TIM4_IRQHandler(void)
+
+void mcal_i2c_tim4_irq_handler(void)
 {
-    if (TIM4->SR & TIM_SR_UIF)
+    if ((TIM4->SR & TIM_SR_UIF) != 0U)
     {
-        TIM4->SR &= ~TIM_SR_UIF;
-        NVIC_ClearPendingIRQ(TIM4_IRQn);
+        TIM4->SR &= ~TIM_SR_UIF;   /* Update flag clear */
         g_i2c_timer_ms++;
     }
 }

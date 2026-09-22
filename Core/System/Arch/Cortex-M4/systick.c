@@ -4,7 +4,7 @@
  * Target  : STM32F411RE
  */
 #include <stdint.h>
-
+#include "option.h"
 #include "systick.h"
 #include "clock.h"
 #include "mcal_macro.h"
